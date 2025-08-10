@@ -1,0 +1,28 @@
+Appunti: Conversazione tecnica su 3D Gaussian Splatting, MCMC e Taming
+
+Data: 2025-08-07
+Fonte: ChatGPT
+Contenuti: Differenze tra 3DGS base, MCMC, Taming; derivate e
+backpropagation con esempi; riflessioni metodologiche utili alla tesi.
+
+------------------------------------------------------------------------
+
+Temi trattati: - Differenza tra ottimizzazione base e variante MCMC nel
+3D Gaussian Splatting - Definizione e ruolo dei minimi locali e
+dell’esplorazione nello spazio delle soluzioni - Esempio numerico
+dettagliato su loss, derivata e backpropagation - Analisi della
+propagazione dei gradienti tra pixel e Gaussiane - Ruolo del rumore in
+SGLD e MCMC per uscire da minimi locali - Taming 3DGS: parametri,
+finalità, confronto con MCMC - Confronti visivi ed esempi pratici
+
+Approfondimenti tecnici: - Derivata della L1 loss: |GT - Pred| →
+derivata = ±1 - Backpropagation in termini di catena: dLoss/dParam =
+dLoss/dI_rendered × dI_rendered/dParam - Gaussiane proiettate come
+ellissi 2D con supporto continuo (influenzano più pixel) - Formula SGLD:
+θₜ₊₁ = θₜ - η ∇L(θₜ) + √(2η)·N(0,I)
+
+------------------------------------------------------------------------
+
+Nota: Questi appunti possono essere usati come materiale tecnico per la
+revisione del capitolo sulla metodologia o per eventuali appendici
+esplicative nella tesi.

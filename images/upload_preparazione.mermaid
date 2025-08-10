@@ -1,0 +1,16 @@
+%%{init: {'theme':'neutral', 'themeVariables': { 'fontSize': '14px'}}}%%
+flowchart TD
+    A[Utente carica video] --> B[Frontend richiede presigned URL]
+    B --> C[Backend genera presigned URL]
+    C --> D[Frontend upload video su S3]
+    D --> E[Frontend crea modello<br/>POST /models]
+    E --> F[Backend salva metadati su MongoDB]
+    F --> G[Insert job Frame Extraction<br/>in RabbitMQ]
+    G --> H[Job Executor esegue<br/>Frame Extraction]
+    H --> I{Successo?}
+    I -->|Sì| J[Continua con<br/>Cloud Point Building]
+    I -->|No| K[Modello marcato FAILED]
+    
+    style A fill:#e1f5fe
+    style J fill:#fff3e0
+    style K fill:#ffcdd2

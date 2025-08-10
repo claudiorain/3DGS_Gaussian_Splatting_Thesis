@@ -1,0 +1,84 @@
+\chapter{Parametri di configurazione del training}\label{app:parametri}
+
+\section{Parametri base (3D Gaussian Splatting)}\label{app:3dgs}
+\begin{sidewaystable}
+	\centering
+	\footnotesize
+	\begin{tabular}{|p{3.9cm}|p{1.3cm}|p{3.8cm}|p{3.8cm}|p{3.8cm}|}
+		\hline
+		\textbf{Parametro} & \textbf{Default} & \textbf{Ruolo} & \textbf{Valori più alti} & \textbf{Valori più bassi} \\ 
+		\hline
+		\texttt{--iterations} & 30.000 & Numero totale di iterazioni di training & Migliore qualità finale, maggior costo computazionale, rischio overfitting & Convergenza insufficiente, qualità limitata, training più veloce \\
+		\hline
+		\texttt{--resolution} & -1 (auto) & Fattore di downscaling risoluzione immagini di input & Migliore qualità visiva e dettagli, maggior tempo e memoria & Training più veloce e leggero, perdita di dettagli e precisione\\
+		\hline
+		\texttt{--sh\_degree} & 3 & Ordine armoniche sferiche per proprietà angolari & Effetti di luce più realistici e complessi (max 3) & Illuminazione e riflettanza limitate, minore realismo \\
+		\hline
+		\texttt{--densify\_from\_iter} & 500 & Iterazione di inizio densificazione & Processo iniziale più stabile, miglioramento più lento & Copertura scena più rapida, possibile instabilità iniziale \\
+		\hline
+		\texttt{--densify\_until\_iter} & 15.000 & Iterazione di fine densificazione & Migliori dettagli finali, maggior costo computazionale, rischio overfitting & Minore costo computazionale, limitata cattura dettagli nelle fasi avanzate\\
+		\hline
+		\texttt{--densify\_grad\_threshold} & 0,0002 & Soglia gradiente 2D per densificazione & Processo conservativo, minor dettaglio, maggiore efficienza & Densificazione aggressiva, maggior dettaglio, più primitive e costo \\
+		\hline
+		\texttt{--densification\_interval} & 100 & Frequenza densificazione (ogni N iterazioni) & Densificazione meno frequente, minor controllo dettagli & Densificazione più frequente, miglior controllo dettagli, maggior costo\\
+		\hline
+		\texttt{--opacity\_reset\_interval} & 3.000 & Frequenza reset opacità Gaussiane & Reset meno frequenti, possibili accumuli di opacità stagnante & Reset più frequenti, evita accumuli ma può destabilizzare \\
+		\hline
+		\texttt{--percent\_dense} & 0,01 & Percentuale volume scena per densificazione forzata & Densificazione più selettiva, minor costo computazionale & Densificazione più estesa, più Gaussiane, maggior costo\\
+		\hline
+		\texttt{--lambda\_dssim} & 0,2 & Peso componente DSSIM vs L1 Loss & Maggior dettaglio strutturale, possibile rallentamento ottimizzazione & Focus su loss pixel-wise, minor attenzione alla struttura \\
+		\hline
+	\end{tabular}
+	\caption{Parametri principali del training 3D Gaussian Splatting}
+	\label{tab:3dgs_params}
+\end{sidewaystable}
+
+\section{Parametri aggiuntivi MCMC}\label{app:mcmc}  
+\begin{sidewaystable}
+	\centering
+	\footnotesize
+	\textit{Nota: Il metodo MCMC estende l'algoritmo base 3D Gaussian Splatting, pertanto tutti i parametri della tabella precedente rimangono disponibili e utilizzabili in combinazione con quelli qui descritti.}
+	\vspace{0.3cm}
+	\begin{tabular}{|p{3.5cm}|p{1.5cm}|p{4cm}|p{4cm}|p{3.5cm}|}
+		\hline
+		\textbf{Parametro} & \textbf{Default} & \textbf{Ruolo} & \textbf{Valori più alti} & \textbf{Valori più bassi} \\ 
+		\hline
+		\texttt{--cap\_max} & 1.000.000 & Numero massimo di Gaussiane utilizzabili durante l'intero training & Maggiore capacità di rappresentare dettagli fini, aumento significativo di memoria e tempo di rendering & Limitazione nella rappresentazione di dettagli fini, minore consumo di risorse computazionali \\
+		\hline
+		\texttt{--scale\_reg} & 0,01 & Penalizzazione per Gaussiane troppo piccole o troppo grandi, mantiene range fisicamente plausibile & Regolarizzazione più forte, scale più uniformi, possibile limitazione di dettagli molto fini o molto grossolani & Regolarizzazione più debole, maggiore libertà nelle scale, rischio di degenerazioni e instabilità nel rendering \\
+		\hline
+		\texttt{--opacity\_reg} & 0,01 & Penalizzazione valori estremi di opacità (0 o 1), incoraggia valori intermedi & Opacità più moderate, blending omogeneo, minore dominanza locale, possibile appiattimento resa visiva & Opacità più estreme, rappresentazione più netta e contrastata, rischio gaussiane irrilevanti o artefatti visivi \\
+		\hline
+		\texttt{--noise\_lr} & 0,005 & Learning rate del termine stocastico in SGLD per l'esplorazione dello spazio delle soluzioni & Maggiore capacità esplorativa, miglior evitamento minimi locali, rallentamento convergenza & Convergenza più rapida e stabile, ridotta capacità di evitare minimi locali subottimali \\
+		\hline
+	\end{tabular}
+	\caption{Parametri aggiuntivi del metodo MCMC per 3D Gaussian Splatting}
+	\label{tab:mcmc_params}
+\end{sidewaystable}
+
+\section{Parametri aggiuntivi Taming 3DGS}\label{app:taming}
+\begin{sidewaystable}
+	\centering
+	\footnotesize
+	\textit{Nota: Il metodo Taming 3DGS estende l'algoritmo base 3D Gaussian Splatting, pertanto tutti i parametri della prima tabella rimangono disponibili e utilizzabili in combinazione con quelli qui descritti.}
+	\vspace{0.3cm}
+	\begin{tabular}{|p{3cm}|p{2cm}|p{4.5cm}|p{4cm}|p{3.5cm}|}
+		\hline
+		\textbf{Parametro} & \textbf{Default} & \textbf{Ruolo} & \textbf{Valori più alti} & \textbf{Valori più bassi} \\ 
+		\hline
+		\texttt{--cams} & 10 & Numero di viste utilizzate per il calcolo dello score di rilevanza di ogni Gaussiana & Stima più robusta della rilevanza delle Gaussiane, maggior costo computazionale per il calcolo degli score & Valutazione più rapida ed efficiente, rischio di sottostimare l'importanza di alcune Gaussiane \\
+		\hline
+		\texttt{--budget} & Variabile & Numero finale di Gaussiane desiderate (intero o float, dipende da \texttt{--mode}) & Maggiore dettaglio e qualità della ricostruzione, uso più intensivo di memoria e tempo di calcolo & Ricostruzione più leggera e veloce, rischio di perdita di dettaglio nella rappresentazione finale \\
+		\hline
+		\texttt{--mode} & - & Modalità di interpretazione del budget: \texttt{final\_count} (numero esatto) o \texttt{multiplier} (fattore su point cloud iniziale) & Con \texttt{multiplier}: fattore maggiore aumenta proporzionalmente le Gaussiane rispetto ai punti iniziali & Con \texttt{final\_count}: controllo assoluto ma meno adattivo alla complessità intrinseca della scena \\
+		\hline
+		\texttt{--ho\_iteration} & 15.000 & Iterazione di attivazione delle Gaussiane ad alta opacità per stabilizzare il training iniziale & Training più conservativo e stabile, ritardo nell'introduzione di dettagli ad alta visibilità & Attivazione precoce delle Gaussiane, accelerazione del dettaglio visivo ma rischio instabilità \\
+		\hline
+		\texttt{--sh\_lower} & OFF & Riduce frequenza aggiornamenti armonici sferici (ogni 16 iter.) per ottimizzare il costo del lighting & Maggior risparmio computazionale, adatto per scene con illuminazione uniforme & Aggiornamenti più frequenti del lighting, maggior fedeltà negli effetti angolari \\
+		\hline
+	\end{tabular}
+	\caption{Parametri aggiuntivi del metodo Taming 3DGS}
+	\label{tab:taming_params}
+\end{sidewaystable}
+
+

@@ -1,0 +1,302 @@
+
+\documentclass[a4paper,twoside,11pt]{book}
+
+% === LINGUA E FONT ===
+\usepackage[main=italian, english]{babel}
+\usepackage[no-math]{fontspec}
+
+
+
+\newfontfamily\TahomaFont[
+Scale=1,
+Ligatures={TeX},
+BoldFont={Tahoma-Bold.ttf}, 
+ItalicFont={Verdana-Italic.ttf},
+]{Tahoma.ttf}
+\TahomaFont
+
+% === MATEMATICA (consolidata) ===
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{braket}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{adjustbox}
+\usepackage{listings}
+\usepackage{dirtree}
+\usepackage{titlesec}
+\usepackage{subcaption}
+\usepackage{placeins}  % nel preambolo
+\usepackage{tcolorbox}  % nel preambolo
+\usepackage{pgfplots}
+
+\usepackage{pgfplotstable}
+\usepackage{rotating}
+\usepackage{array,booktabs,tabularx,threeparttable,makecell}
+\usepackage{pifont}
+
+% --- Grafici VRAM vs tempo ---
+
+
+
+
+
+% colori coerenti per gli algoritmi
+\definecolor{inriacol}{RGB}{60,60,60}
+\definecolor{mcmccol}{RGB}{200,40,40}
+\definecolor{tamingcol}{RGB}{20,140,70}
+\newcommand{\cmark}{\textcolor{green!60!black}{\ding{51}}} % ✓
+\newcommand{\xmark}{\textcolor{red!70!black}{\ding{55}}}   % ✗
+\newcommand{\warn}{\textcolor{orange!80!black}{\ding{108}}}% pallino pieno
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\pgfplotsset{compat=newest}
+% ✨ NUOVO: Controllo automatico spazi per titoli
+\usepackage{needspace}
+\usetikzlibrary{calc}      
+\usepgfplotslibrary{groupplots}   % <-- serve per \begin{groupplot}
+\pgfplotsset{compat=1.18}
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+
+% SECTION (Livello 1) - Dimensione grande, grassetto, numerato
+\titleformat{\section}
+{\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+% ✨ MODIFICATO: SUBSECTION con controllo automatico spazi
+\titleformat{\subsection}
+{\Needspace{4\baselineskip}\normalfont\large\bfseries}{\thesubsection}{1em}{}
+
+% ✨ MODIFICATO: SUBSUBSECTION con controllo automatico spazi  
+\titleformat{\subsubsection}
+{\Needspace{3\baselineskip}\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% PARAGRAPH (Livello 4) - Dimensione normale, grassetto, NON inline
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+% SUBPARAGRAPH (Livello 5) - Dimensione piccola, grassetto, NON inline
+\titleformat{\subparagraph}
+{\normalfont\small\bfseries}{\thesubparagraph}{1em}{}
+\titlespacing*{\subparagraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+% === CONTROLLO NUMERAZIONE PROFONDITÀ ===
+% Numera fino al livello subsubsection (3)
+\setcounter{secnumdepth}{3}
+% Mostra nell'indice fino al livello subsection (2) 
+\setcounter{tocdepth}{2}
+
+% === SPAZIATURE OTTIMIZZATE ===
+% Sostituisci le tue configurazioni esistenti con queste:
+\titlespacing*{\chapter}{0pt}{50pt}{40pt}
+\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+%\usepackage{microtype}  % Migliora la distribuzione del testo
+\lstdefinelanguage{docker}{
+	keywords={FROM, RUN, COPY, ADD, ENTRYPOINT, CMD,  ENV, ARG, WORKDIR, EXPOSE, LABEL, USER, VOLUME, STOPSIGNAL, ONBUILD, MAINTAINER, HEALTHCHECK},
+	keywordstyle=\color{blue}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{\#},
+	commentstyle=\color{green!60!black}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+\lstdefinelanguage{docker-compose}{
+	keywords={image, environment, ports, container_name, ports, volumes, links},
+	keywordstyle=\color{blue}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{\#},
+	commentstyle=\color{green!60!black}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+\lstdefinelanguage{JavaScript}{
+	keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, const, let},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{green!60!black}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstset{
+	basicstyle=\ttfamily\footnotesize,
+	keywordstyle=\color{blue},
+	commentstyle=\color{green!60!black},
+	stringstyle=\color{red},
+	breaklines=true,
+	frame=single,
+	showstringspaces=false,  % Rimuove i simboli degli spazi
+	backgroundcolor=\color{gray!10}
+}
+
+% === BIBLIOGRAFIA ===
+\usepackage[backend=biber, sorting=none]{biblatex}
+\addbibresource{Bibliography_thesis.bib}
+
+% === ALGORITMI ===
+\usepackage[ruled,vlined]{algorithm2e}
+
+% === CITAZIONI ===
+\usepackage[autostyle, italian=guillemets]{csquotes}
+
+% === POSIZIONAMENTO ===
+\usepackage[absolute]{textpos}
+
+% === INDICE ===
+\usepackage{makeidx}
+\makeindex
+
+% === PERSONALIZZAZIONI HEADER ===
+\usepackage{regexpatch}
+\makeatletter
+\xpatchcmd{\chaptermark}{\MakeUppercase}{}{}{}%
+\xpatchcmd{\sectionmark}{\MakeUppercase}{}{}{}%
+\xpatchcmd*{\tableofcontents}{\MakeUppercase}{}{}{}%
+\makeatother
+
+% Delimitatori
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+% === NUMERAZIONE EQUAZIONI ===
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+
+% === NOMI ITALIANI ===
+\renewcommand{\contentsname}{Indice}
+\renewcommand{\bibname}{Bibliografia}
+\renewcommand{\chaptername}{Capitolo}
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabella}
+\renewcommand{\appendixname}{Appendice}
+\renewcommand{\indexname}{Indice analitico}
+
+\setlength{\parindent}{0pt}  % Elimina TUTTI i rientri
+
+\newtheorem{innercustomgeneric}{\customgenericname}
+\providecommand{\customgenericname}{}
+\newcommand{\newcustomtheorem}[2]{%
+	\newenvironment{#1}[1]
+	{%
+		\renewcommand\customgenericname{#2}%
+		\renewcommand\theinnercustomgeneric{##1}%
+		\innercustomgeneric
+	}
+	{\endinnercustomgeneric}
+}
+\newcustomtheorem{custompost}{Postulate}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begingroup
+
+\begin{textblock*}{4cm}(8.65cm,1.03cm)
+	\centerline {\includegraphics[width=3.67cm]{images/LogoUniToConvertito.jpg}}
+\end{textblock*}
+
+
+\begin{textblock*}{21cm}(0cm,8,98cm)
+	\fontsize{18}{22}\selectfont
+	\centerline {\textbf{ Universit\`a degli Studi di Torino}}
+\end{textblock*}
+\begin{textblock*}{21cm}(0cm,9.97cm)
+	\fontsize{18}{22}\selectfont
+	\centerline {\textit{ Corso di Laurea in Informatica}}
+\end{textblock*}
+
+
+\begin{textblock*}{21cm}(0cm,13.66cm)
+	\fontsize{20}{24}\selectfont
+	\centerline  {\textbf{Titolo}}
+\end{textblock*}
+\begin{textblock*}{21cm}(0cm,14.46cm)
+	\fontsize{18}{22}\selectfont
+	\centering{\Large {Piattaforma Web Distribuita per 3D Gaussian
+Splatting: Architettura a Microservizi per la
+Ricostruzione 3D da Video}}
+\end{textblock*}
+
+
+
+\fontsize{14}{17}\selectfont
+
+\begin{textblock*}{8cm}(3.04cm,18.26cm)
+	\noindent 
+	\textbf{Relatore}
+\end{textblock*}
+\begin{textblock*}{8cm}(3.04cm,18.85cm)
+	\noindent 
+	Grangetto Marco
+\end{textblock*}
+
+\begin{textblock*}{8cm}(12.33cm,22.95cm)
+	\noindent
+	\textbf{Candidato}
+\end{textblock*}
+\begin{textblock*}{8cm}(12.33cm,23.55cm)
+	\noindent	\textbf{Claudio Pioggia}
+\end{textblock*}
+\begin{textblock*}{8cm}(12.33cm,24.14cm)
+	\noindent	262307
+\end{textblock*}
+
+\begin{textblock*}{21cm}(0cm,27.34cm)
+	\centerline{Anno Accademico 2024/2025}
+\end{textblock*}
+
+\endgroup
+
+\thispagestyle{empty}
+$ $
+
+
+\TPoptions{absolute=false}
+\pagestyle{plain}
+\frontmatter
+
+
+%\pagenumbering{arabic}
+%\setcounter{page}{1}
+\tableofcontents
+%\include{Abstract}
+\newpage
+
+
+\include{Introduction}
+\include{Acknowledgements}
+
+%\include{symbols}
+%Eventuali altre parti preliminari
+\mainmatter
+
+\include{Chapter1}
+\include{Chapter2}
+\include{Chapter3}
+\include{Chapter4}
+\include{Chapter5}
+
+\appendix
+% Inizio appendice
+\include{Appendix}
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{\bibname}
+%\nocite{*}
+\printbibliography
+\end{document}

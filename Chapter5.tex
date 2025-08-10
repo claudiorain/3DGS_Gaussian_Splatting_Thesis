@@ -1,0 +1,191 @@
+\chapter{Criticità, limitazioni e prospettive di miglioramento}
+
+\section{Limitazioni e criticità}
+
+\subsection{Acquisizione dei dati}
+\subsubsection{Copertura e qualità delle riprese.}
+La fase di acquisizione video si è rivelata complessa, soprattutto nel garantire una copertura completa delle varie angolazioni di un oggetto o di una scena.  
+In diversi casi è stato necessario ripetere le riprese a causa della mancanza di dettagli in certe aree, specialmente per oggetti di grandi dimensioni (es. tetto della libreria nel castello), con conseguente degrado della qualità visiva complessiva del modello.  
+Tale criticità è rilevante anche in considerazione della durata delle fasi di training, che può raggiungere le 1--2 ore per singolo modello.
+
+\paragraph{Possibili miglioramenti:} 
+\begin{itemize}
+	\item Realizzazione di tutorial video e guide visive nella \emph{presentation layer}, in grado di illustrare passo-passo come effettuare la ripresa ottimale.
+	\item Implementazione di un sistema di supporto visivo per il controllo della copertura, perseguibile secondo due approcci:
+	\begin{enumerate}
+		\item \textbf{In tempo reale}: sviluppo di un'app di acquisizione dedicata, capace di fornire \emph{overlay} o \emph{heatmap} live che evidenzino le zone già riprese e quelle mancanti.
+		\item \textbf{Post-upload}: analisi rapida del video caricato, con generazione di una mappa di copertura e suggerimenti per effettuare eventuali riprese integrative da specifiche angolazioni.
+	\end{enumerate}
+	\item Utilizzo di tecniche di intelligenza artificiale per stimare e generare viste mancanti, mediante \emph{novel view synthesis} o \emph{inpainting}\footnote{Nel contesto di questa tesi, l'\emph{inpainting} può essere applicato in due modi: (1) in 2D, completando immagini mancanti o parziali per generare viste non acquisite prima del training; (2) in 3D, ricostruendo porzioni mancanti di un modello tridimensionale (mesh o nuvola di punti) sulla base del contesto geometrico e cromatico circostante, approccio più complesso e considerato come possibile sviluppo futuro.}, al fine di coprire angolazioni non acquisite.
+	
+\end{itemize}
+
+\subsubsection{Estrazione dei frame}
+Determinare una metodologia di estrazione dei frame ottimale si è rivelato non banale.  
+L'approccio iniziale, basato su una soluzione custom, ha prodotto risultati incostanti, rendendo necessario l'impiego di una libreria preesistente.  
+Quest'ultima ha fornito metodologie più robuste, ma richiedenti comunque una parametrizzazione accurata per ottenere un bilanciamento adeguato tra qualità visiva e numero di frame.
+
+\paragraph{Possibili miglioramenti:}
+\begin{itemize}
+	\item Adozione di algoritmi di estrazione adattiva, che selezionino i frame in base alla variazione di contenuto (\emph{content variation}) piuttosto che a intervalli temporali fissi, utilizzando metriche come l'indice di similarità strutturale (SSIM) o l'analisi del movimento.
+	\item Implementazione di un sistema di pre-filtraggio automatico dei frame estratti, in grado di scartare quelli mossi, sfocati o sotto/sovraesposti, al fine di migliorare la qualità dei dati in ingresso al processo di training.
+	\item Sperimentazione di tecniche di intelligenza artificiale per l'estrazione \emph{content-aware}, capaci di identificare in modo automatico i frame più rappresentativi della scena in funzione della ricostruzione 3D, eventualmente addestrando modelli leggeri su dataset specifici del dominio.
+\end{itemize}
+
+\subsection{Limitazioni hardware e scalabilità}
+\subsubsection{Risorse limitate}
+L'hardware a disposizione non era ottimale: la GPU NVIDIA RTX 4080 con 16 GB di VRAM si è rivelata inferiore ai 24 GB consigliati per le configurazioni di riferimento.  
+Inoltre, la disponibilità di una sola macchina ha impedito di verificare la scalabilità del sistema in configurazioni multi-GPU o multi-nodo.
+
+\paragraph{Possibili miglioramenti:}
+\begin{itemize}
+	\item Potenziamento diretto delle risorse, mediante l'acquisto di macchine dotate di GPU di fascia alta (es. RTX 6000 Ada, NVIDIA A100, H100) con maggiore VRAM, oppure configurazioni multi-GPU su singolo nodo.
+	\item Utilizzo di servizi di calcolo su cloud (es. AWS EC2 P3/P4, Google Cloud, Azure NV series), che permettano di scalare verticalmente (GPU più potenti) e orizzontalmente (più nodi), con pagamento a consumo.
+	\item Adozione di soluzioni ibride o ottimizzazioni software\footnote{%
+		\emph{Mixed precision training}: utilizzo di formati numerici a precisione ridotta (FP16 o BF16) per ridurre il consumo di memoria e accelerare i calcoli.  
+		\emph{Gradient checkpointing}: tecnica che memorizza solo una parte delle attivazioni intermedie durante il training e ricalcola le altre quando servono, riducendo l'uso di VRAM.  
+		\emph{Distributed training}: addestramento parallelo su più GPU o nodi collegati in rete veloce, ad esempio tramite NCCL o PyTorch Distributed Data Parallel (DDP).  
+	}, ad esempio:
+	\begin{itemize}
+		\item impiego di tecniche di riduzione del consumo di memoria;
+		\item distribuzione del carico di lavoro su più GPU meno potenti ma interconnesse;
+		\item configurazione di una piccola render farm interna.
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Impatto sulla parametrizzazione}
+Le limitazioni hardware hanno influenzato direttamente la definizione dei livelli di qualità, imponendo range di valori ristretti.  
+Questo ha ridotto la possibilità di sperimentare configurazioni più spinte, soprattutto in modalità ``Qualità'', e ha reso necessario calibrare i parametri tenendo conto della capacità massima della GPU.
+
+\paragraph{Possibili miglioramenti:}
+\begin{itemize}
+	\item Potenziamento delle risorse hardware, come descritto nella sottosezione precedente, per ampliare i margini di parametrizzazione.
+	\item Ottimizzazione degli algoritmi di training per ridurre l'uso di memoria e migliorare l'efficienza computazionale, ad esempio mediante gestione dinamica dei batch e compressione temporanea delle strutture dati.
+	\item \item Introduzione di una parametrizzazione adattiva, in cui il sistema regoli automaticamente i parametri di qualità (es. risoluzione, numero di gaussiane, ordine degli armonici sferici) in funzione delle risorse disponibili, minimizzando il rischio di errori \emph{Out-Of-Memory}.  
+	Nel sistema sviluppato è già stata implementata una forma di parametrizzazione adattiva, ma i risultati ottenuti non si sono rivelati pienamente soddisfacenti, indicando la necessità di ulteriori ottimizzazioni per migliorare l'efficacia e la stabilità di questo approccio.
+	
+\end{itemize}
+
+
+\subsection{Parametrizzazione e ottimizzazione}
+\subsubsection{Complessità nella scelta dei parametri}
+L'individuazione della giusta parametrizzazione per processi come l'estrazione dei frame e il training della \emph{point cloud} è risultata complessa, sia per la natura degli algoritmi coinvolti sia per l'assenza di valori ottimali universalmente validi.  
+Ogni scena richiede una calibrazione specifica, aumentando i tempi complessivi di configurazione.  
+
+Una criticità particolare riguarda gli algoritmi \emph{Taming} e \emph{MCMC}, che richiedono la definizione di parametri come \texttt{cap\_max} e \texttt{budget}, rispettivamente il numero di gaussiane da raggiungere e il limite massimo consentito\footnote{\texttt{cap\_max} indica il numero di gaussiane target da ottenere a fine training, mentre \texttt{budget} definisce il massimo numero di gaussiane consentito durante l'esecuzione. Valori troppo bassi possono compromettere il dettaglio, mentre valori troppo alti possono portare a eccessivo consumo di memoria o overfitting.}.  
+Nel sistema sviluppato tali valori sono stati stimati proporzionalmente al numero di punti della nuvola iniziale passata in input, ma questa strategia non sempre si è dimostrata ottimale.  
+
+Ulteriore complessità è emersa nella definizione di livelli di qualità predefiniti, pensati per offrire all’utente un compromesso tra tempo di esecuzione e qualità del risultato.  
+Se da un lato impostazioni più basse hanno garantito tempi di esecuzione ridotti, dall’altro non sempre si è osservato un incremento visivo o metrico significativo passando a livelli più alti.  
+Questo fenomeno è legato non solo a limiti hardware, ma anche a fattori algoritmici: impostazioni troppo spinte possono condurre a fenomeni di \emph{overfitting} o a una saturazione dei miglioramenti, senza un effettivo beneficio per la qualità percepita.
+
+\paragraph{Possibili miglioramenti:}
+\begin{itemize}
+	\item Sviluppo di algoritmi di \emph{scene analysis} in grado di determinare automaticamente le caratteristiche principali della scena (complessità geometrica, livello di dettaglio, dimensioni, presenza di superfici uniformi o ripetitive).
+	\item Implementazione di una parametrizzazione \emph{scene-aware}, che adatti automaticamente valori come la risoluzione, il numero di gaussiane iniziali, l'ordine degli armonici sferici, nonché parametri specifici come \texttt{cap\_max} e \texttt{budget}, in base ai risultati dell'analisi preliminare.
+	\item Creazione di un sistema di raccomandazioni per l'utente, che suggerisca set di parametri o livelli di qualità preconfigurati in funzione della tipologia di scena, minimizzando il rischio di errori, overfitting e tempi di setup eccessivi.
+\end{itemize}
+
+\subsection{Stabilità e maturità degli algoritmi}
+\subsubsection{Algoritmi in fase sperimentale}
+Gli algoritmi di training utilizzati sono soggetti a frequenti aggiornamenti e presentano una documentazione limitata, spesso ristretta alle sole pagine GitHub dei progetti.  
+Parametrizzazioni errate o incompatibili possono causare crash durante il training, richiedendo una costante attività di verifica.
+
+\paragraph{Possibili miglioramenti:}
+\begin{itemize}
+	\item Contribuire attivamente alla documentazione, ad esempio includendo in questa tesi e nella piattaforma sperimentazioni empiriche e configurazioni validate.
+	\item Partecipare allo sviluppo dei progetti open source, segnalando bug, proponendo migliorie o inviando \emph{pull request} con ottimizzazioni e correzioni.
+	\item Integrare nella piattaforma una documentazione interna e continuamente aggiornata, così che l'utente disponga di istruzioni e parametri testati anche in assenza di risorse ufficiali complete.
+	\item Implementare un sistema di \emph{workflow versioning}, registrando la versione dell'algoritmo e la configurazione usata per ogni training, per garantire la riproducibilità dei risultati e semplificare il ritorno a versioni stabili in caso di regressioni.
+\end{itemize}
+
+
+\subsubsection{Instabilità con parametri elevati}
+All'aumentare dei parametri legati alla qualità (ad esempio la risoluzione), si sono verificati casi di degrado significativo del training, fino al blocco del processo o a picchi di utilizzo di memoria (\emph{memory spike}) che hanno portato a errori \emph{Out-Of-Memory (OOM)}.
+
+\paragraph{Possibili miglioramenti:}
+\begin{itemize}
+	\item Implementazione di un sistema di rilevamento dei blocchi (\emph{watchdog}), capace di monitorare lo stato del training e interromperlo automaticamente in assenza di progressi per un periodo di tempo definito, con eventuale riavvio in modalità a parametri ridotti.
+	\item Introduzione di meccanismi di stima preventiva dell'uso di memoria in base alla configurazione scelta, per avvisare l'utente o bloccare l'esecuzione in caso di rischio elevato di errori \emph{OOM}.
+	\item Adozione di un approccio conservativo nella scelta di risoluzione e parametrizzazione quando si lavora su hardware con risorse limitate, come misura preventiva contro picchi di memoria.
+	\item Registrazione e analisi dei log di utilizzo della memoria e dei tempi di esecuzione, così da identificare combinazioni di parametri particolarmente critiche.
+\end{itemize}
+
+\subsection{Output e compatibilità}
+\subsubsection{Dimensioni e formati dei modelli}
+I modelli 3D generati producono \emph{point cloud} in formato \texttt{.ply}, arricchite con attributi specifici delle gaussiane (opacità, covarianza, armonici sferici fino al grado 3).  
+Questi file, troppo pesanti per un utilizzo web diretto, vengono convertiti in formato binario compatto \texttt{.ksplat}, che consente di mantenere in modo parametrico un ordine SH variabile, dal solo termine costante (grado 0) fino al massimo generato (grado 3).  
+In questo modo è possibile scegliere il compromesso ottimale tra qualità visiva e dimensioni finali del modello, riducendo il carico computazionale nei \emph{viewer} web quando si utilizzano ordini inferiori.
+
+L'algoritmo \emph{Taming} produce valori di opacità non direttamente compatibili con i \emph{viewer}, richiedendo una trasformazione (inverse sigmoid) in fase di conversione.  
+
+Nel contesto web, la dimensione dei file \texttt{.ksplat} ottenuti è risultata generalmente più che accettabile sia per le prestazioni di caricamento lato client, sia per i costi di archiviazione e trasferimento su servizi cloud come Amazon S3, anche in scenari di distribuzione su larga scala.
+
+\paragraph{Possibili miglioramenti:}
+\begin{itemize}
+	\item Valutare l'adozione di tecniche di compressione per nuvole di punti, come \emph{Draco}\footnote{\url{https://google.github.io/draco/}}, che però risulta compatibile nativamente solo con dati geometrici e cromatici (XYZ + colore).  
+	Per gli altri attributi caratteristici delle gaussiane (opacità, covarianza, armonici sferici) sarebbe necessaria un'estensione del formato o una codifica ibrida.
+	\item Implementare strategie di \emph{progressive loading}, caricando inizialmente le gaussiane più rilevanti e aggiungendo i dettagli in un secondo momento.
+	\item Ottimizzare la conversione in \texttt{.ksplat} con modalità \emph{lossy} per l'uso web, eliminando gaussiane irrilevanti (es. con opacità molto bassa o dimensioni trascurabili).
+	\item Gestire i file nel cloud con politiche di \emph{tiered storage}, conservando in storage rapido solo i modelli di uso frequente e spostando gli altri su archiviazioni più economiche.
+	\item Consentire la selezione e il download del modello originale in formato completo (es. \texttt{.ply} con SH fino al grado 3) per usi offline o visualizzazione in un \emph{viewer} desktop, preservando la qualità massima senza vincoli delle ottimizzazioni web.
+\end{itemize}
+
+\subsubsection{Limiti dei viewer web}
+Gli algoritmi permettono di generare gaussiane con armonici sferici (SH) fino all'ordine 3\footnote{L'ordine SH indica il grado massimo $l$ degli armonici sferici utilizzati.  
+	Il numero di coefficienti per canale cresce con la formula $(l+1)^2$:  
+	ordine 0 $\rightarrow$ 1 coefficiente, ordine 1 $\rightarrow$ 4 coefficienti, ordine 2 $\rightarrow$ 9 coefficienti, ordine 3 $\rightarrow$ 16 coefficienti.  
+	Con 3 canali colore (RGB), mantenere SH3 richiede 48 coefficienti per gaussiana, contro i soli 3 di SH0.}, il che consente di rappresentare in modo più accurato le variazioni angolari ad alta frequenza e migliorare la resa visiva complessiva, soprattutto nei dettagli più fini e nei riflessi complessi.  
+
+La conversione in formato binario \texttt{.ksplat} consente di mantenere in modo parametrico un ordine SH variabile, fino al massimo generato (SH3), scegliendo così il compromesso tra qualità visiva e dimensioni finali del modello.  
+
+Il mantenimento di ordini SH più elevati comporta file di dimensioni maggiori e un carico computazionale più alto lato viewer, ma offre una resa più fedele.  
+Questa flessibilità consente di adattare il formato di output alle esigenze specifiche: ad esempio, mantenere solo SH0 o SH1 per scenari mobile a bassa banda, o conservare SH3 per usi desktop e presentazioni ad alta fedeltà.
+
+Per sfruttare appieno SH3 in contesto web, è comunque necessario che il \emph{viewer} sia in grado di gestirli efficientemente; ciò può richiedere ottimizzazioni dedicate o l'uso di tecnologie più recenti come \emph{WebGPU}, con eventuali compromessi in termini di compatibilità con hardware e browser meno performanti.
+
+
+\section{Sviluppi futuri}
+L'analisi delle limitazioni e criticità presentata nelle sezioni precedenti mette in evidenza come molti degli ostacoli individuati possano essere trasformati in opportunità di evoluzione del sistema.  
+In alcuni casi, gli sviluppi futuri rappresentano un naturale proseguimento del lavoro svolto, con l'obiettivo di superare vincoli tecnici o migliorare l'esperienza dell'utente.  
+In altri, si tratta di estensioni concettuali e applicative che aprono a nuovi scenari d'uso, anche al di fuori del contesto sperimentale di questa tesi.  
+Di seguito si elencano alcune direzioni di sviluppo ritenute particolarmente promettenti:
+
+\begin{enumerate}
+	\item \textbf{Estensione a Gaussian Splatting 4D}  
+	Evoluzione del modello attuale verso il \emph{4D Gaussian Splatting}, in cui la quarta dimensione è il tempo.  
+	Questa tecnica consente di rappresentare scene dinamiche, in cui le gaussiane variano posizione, colore o opacità nel tempo, aprendo la strada ad applicazioni come video volumetrici, cattura di movimenti e ricostruzioni di eventi in tempo reale.
+	
+	\item \textbf{Analisi video assistita da intelligenza artificiale}  
+	Sviluppo di un modulo in grado di analizzare il video acquisito, valutando copertura spaziale e temporale e segnalando eventuali zone non riprese.  
+	Tale sistema potrebbe suggerire riprese integrative all'utente, riducendo il rischio di ricostruzioni incomplete senza richiedere conoscenze tecniche specifiche.
+	
+	\item \textbf{Parametrizzazione automatica \emph{scene-aware}}  
+	Implementazione di algoritmi di analisi della scena (densità dei punti, complessità geometrica, livello di dettaglio) per impostare automaticamente parametri chiave come \texttt{cap\_max}, \texttt{budget}, risoluzione iniziale e ordine SH.  
+	Questo approccio ridurrebbe la necessità di intervento manuale, migliorando la coerenza e l'efficienza del processo di training.
+	
+	\item \textbf{Ottimizzazione per realtà aumentata (AR) e realtà virtuale (VR)}  
+	Adattamento del sistema per la fruizione dei modelli in ambienti AR e VR, con tecniche di caricamento progressivo e gestione ottimizzata della latenza.  
+	Questa evoluzione permetterebbe l'integrazione in applicazioni immersive, anche con modelli complessi.
+	
+	\item \textbf{Supporto a formati e viewer avanzati}  
+	Estensione della compatibilità a formati 3D standard come USDZ o glTF (con eventuali estensioni per gaussiane), o sviluppo di un \emph{viewer} basato su \emph{WebGPU} con supporto nativo fino a SH3.  
+	Ciò migliorerebbe l'interoperabilità con altri software e piattaforme e permetterebbe una resa visiva più fedele.
+\end{enumerate}
+
+\section{Conclusioni}
+Il lavoro presentato in questa tesi ha dimostrato la fattibilità e l'efficacia di un sistema di ricostruzione tridimensionale basato su tecniche di \emph{Gaussian Splatting}, integrato in una pipeline che copre l'intero flusso: dall'acquisizione video, al pre-processing, al training del modello, fino alla visualizzazione web.  
+
+Il progetto ha richiesto un bilanciamento costante tra vincoli teorici, limitazioni pratiche e obiettivi prestazionali.  
+L'adozione e l'adattamento di algoritmi come \emph{Taming} e \emph{MCMC} hanno permesso di esplorare soluzioni avanzate di ottimizzazione, affrontando sfide legate alla parametrizzazione, alla stabilità e alla compatibilità con le piattaforme di fruizione.  
+Particolare attenzione è stata dedicata alla fase di acquisizione e preparazione dei dati, dove la qualità delle riprese e la completezza della copertura si sono rivelate fattori determinanti per la resa finale del modello.
+
+L'analisi delle criticità ha evidenziato come molti limiti non siano insormontabili, ma piuttosto punti di partenza per futuri sviluppi: dalla parametrizzazione automatica \emph{scene-aware}, all'estensione verso rappresentazioni temporali (4D), fino alla realizzazione di viewer web più sofisticati in grado di supportare ordini SH più elevati.  
+Questi obiettivi non solo mirano a migliorare le prestazioni tecniche, ma anche a rendere il sistema più accessibile e adattabile a scenari applicativi differenti, dal settore culturale a quello industriale.
+
+Il contributo principale di questo lavoro risiede dunque nell'aver integrato e adattato tecniche di \emph{Gaussian Splatting} a un contesto operativo reale, sviluppando una pipeline funzionale e flessibile che può fungere da base per ulteriori evoluzioni.  
+La combinazione di analisi tecnica, sperimentazione empirica e riflessione sulle prospettive future fornisce una visione chiara delle potenzialità di questa tecnologia, suggerendo come essa possa consolidarsi nei prossimi anni come strumento di riferimento per la rappresentazione tridimensionale di alta qualità.
+
+In sintesi, questa tesi non si limita a presentare una soluzione tecnica, ma propone un approccio metodologico che unisce rigore scientifico, attenzione all'usabilità e apertura all'innovazione, ponendo solide basi per ricerche e applicazioni future.
+
+

@@ -1,0 +1,14 @@
+%%{init: {'theme':'neutral', 'themeVariables': { 'fontSize': '14px'}}}%%
+flowchart TD
+    A[Da Upload modello 3D] --> B[Job Executor calcola<br/>metriche qualità]
+    B --> C{Successo?}
+    C -->|Sì| D[Modello marcato COMPLETED]
+    C -->|No| E[Modello marcato FAILED]
+    
+    D --> F[Utente visualizza modello<br/>3D nel frontend]
+    E --> G[Utente può clonare e<br/>riavviare dal frontend]
+    
+    style A fill:#fff3e0
+    style F fill:#c8e6c9
+    style E fill:#ffcdd2
+    style G fill:#fff3e0

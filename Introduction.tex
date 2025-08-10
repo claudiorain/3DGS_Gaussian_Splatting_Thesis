@@ -1,0 +1,66 @@
+\chapter*{Introduzione}
+\addcontentsline{toc}{chapter}{Introduzione}
+
+\section*{Motivazioni, obiettivi e contributi}
+Il 3D Gaussian Splatting rappresenta una delle innovazioni più promettenti nel campo della ricostruzione 3D e del novel view synthesis, offrendo un approccio efficiente per la generazione di scene tridimensionali fotorealistiche a partire da un insieme di immagini o video. Questa tecnica, introdotta nel 2023, ha rapidamente guadagnato attenzione nella comunità scientifica per la sua capacità di combinare alta qualità visiva con velocità di rendering in tempo reale una volta completato il training, superando molte delle limitazioni delle tecniche precedenti.
+Tuttavia, nonostante i risultati impressionanti raggiunti in ambito di ricerca, l'utilizzo del 3D Gaussian Splatting rimane confinato principalmente agli esperti del settore: le implementazioni esistenti richiedono competenze tecniche specifiche, configurazioni complesse e una conoscenza approfondita dei parametri di training. Queste barriere tecniche limitano significativamente l'adozione della tecnologia da parte di utenti non specializzati, impedendo lo sfruttamento del suo potenziale in applicazioni più ampie.
+
+% Configurazione sottosezioni (se vuoi personalizzare)
+\subsection*{Obiettivi del progetto}
+Il presente lavoro si propone di colmare questo divario attraverso lo sviluppo di una piattaforma web integrata che renda il 3D Gaussian Splatting accessibile a un pubblico più ampio.
+Gli obiettivi specifici del progetto includono:
+
+\begin{itemize}
+    \item \textbf{Progettazione di un'architettura distribuita}: sviluppo di un sistema basato su microservizi containerizzati che consenta scalabilità e manutenibilità del sistema.
+    \item \textbf{Implementazione di una pipeline end-to-end}: creazione di un workflow completo che guidi l'utente dal caricamento del video fino alla visualizzazione del modello 3D finale.
+    \item \textbf{Integrazione di algoritmi multipli}: supporto per diversi approcci di training (Standard, MCMC, Taming 3DGS) per consentire confronti e ottimizzazioni in base alle esigenze specifiche.
+    \item \textbf{Interfaccia utente intuitiva}: sviluppo di un frontend web che semplifichi l'interazione con la tecnologia, nascondendo la complessità tecnica sottostante.
+    \item \textbf{Valutazione delle prestazioni}: implementazione di un sistema di raccolta metriche che registra i risultati di qualità (PSNR, SSIM) e tempi di training per ciascun algoritmo, creando le basi per future analisi comparative sistematiche.
+\end{itemize}
+
+\subsection*{Contributi originali}
+I principali contributi originali di questo lavoro sono:
+\begin{itemize}
+\item \textbf{Contributo architetturale}: progettazione di un'architettura a microservizi per il 3D Gaussian Splatting con implementazione di componenti specializzati, inclusi algoritmi di estrazione frame intelligente da video, sistema di preprocessing per la stima delle gaussiane iniziali per algoritmi MCMC e Taming, pipeline di gestione asincrona del workflow completo, e trasformazione adattiva dei dati di output in formati ottimizzati per la fruizione tramite web viewer interattivi.
+\item \textbf{Contributo di integrazione}: Sviluppo di una piattaforma unificata che integra e rende accessibili tre diversi algoritmi di training per il Gaussian Splatting (Standard, MCMC, Taming), fornendo un framework comparativo per la valutazione delle loro prestazioni relative.
+\item \textbf{Contributo di usabilità}: Realizzazione di un'interfaccia web user-friendly che automatizza e semplifica il processo di creazione di modelli 3D, rendendo la tecnologia accessibile anche a utenti senza competenze tecniche specifiche.
+\end{itemize}
+
+\subsection*{Motivazioni tecniche}
+La scelta di un'architettura distribuita basata su container Docker è motivata da diverse considerazioni tecniche. Il processo di training del Gaussian Splatting è computazionalmente intensivo e può richiedere da alcuni minuti a diverse ore, a seconda della complessità della scena, delle risorse hardware a disposizione e della qualità desiderata. Un'architettura monolitica, pur mantenendo operativo il frontend, limiterebbe significativamente la capacità di gestire múltipli job di training concorrenti e impedirebbe l'allocazione efficiente delle risorse computazionali.
+\newline
+\newline
+L'approccio a microservizi consente di separare le diverse responsabilità del sistema e, soprattutto, di scalare orizzontalmente i componenti più computazionalmente intensivi. I servizi di training, essendo containerizzati e stateless, possono essere deployati su multiple macchine per processare job in parallelo, mentre il frontend e l'API rimangono centralizzati. 
+Questa architettura permette di aggiungere capacità computazionale semplicemente deployando nuove istanze dei container di training su hardware aggiuntivo.
+\newline
+\newline
+La containerizzazione con Docker offre ulteriori vantaggi in termini di isolamento delle dipendenze, riproducibilità dell'ambiente di esecuzione e facilità di deployment. Ogni componente del sistema può essere sviluppato, testato e deployato indipendentemente, facilitando la manutenzione e l'evoluzione del sistema.
+\subsection*{Metodologia di sviluppo}
+Il progetto ha seguito un approccio di sviluppo esplorativo, caratteristico della ricerca applicata. Partendo dall'analisi delle implementazioni esistenti di 3D Gaussian Splatting, sono stati identificati i requisiti funzionali principali e progettata un'architettura modulare che potesse integrarli efficacemente.
+\newline
+\newline
+Lo sviluppo è proceduto in modo iterativo, con l'implementazione graduale dei diversi componenti del sistema e la loro integrazione progressiva. Particolare attenzione è stata dedicata alla valutazione delle prestazioni, attraverso la raccolta di metriche oggettive (PSNR, SSIM, tempi di processing) che permettessero una valutazione quantitativa della qualità dei risultati ottenuti.
+
+
+\section*{Struttura della tesi}
+\label{sec:struttura}
+
+La tesi è organizzata come segue:
+\newline
+\newline
+Il \textbf{Capitolo 1} presenta lo stato dell'arte del 3D Gaussian Splatting, fornendo il contesto teorico necessario alla comprensione del lavoro. Inizia con una panoramica delle rappresentazioni 3D esistenti, dalle tecniche tradizionali agli approcci neurali emergenti, per poi approfondire i fondamenti teorici del Gaussian Splatting. Vengono descritti i diversi algoritmi di training disponibili (Standard, MCMC, Taming) e analizzate le applicazioni attuali. Il capitolo si conclude identificando le limitazioni che ostacolano l'adozione diffusa della tecnologia.
+\newline
+\newline
+Il \textbf{Capitolo 2} descrive l'architettura del sistema proposto, dettagliando gli obiettivi funzionali e le scelte progettuali adottate. Viene presentato l'approccio a microservizi containerizzati, i diversi componenti del sistema e le loro interazioni. Il capitolo include il flusso di elaborazione end-to-end e conclude con le motivazioni delle scelte tecnologiche effettuate.
+\newline
+\newline
+Il \textbf{Capitolo 3} illustra i dettagli implementativi dei vari componenti del sistema. Ogni sezione si concentra su un aspetto specifico dell'implementazione: dal frontend con Three.js per la visualizzazione 3D, al backend per la gestione delle API, dal sistema di processing video al motore di training che integra i diversi algoritmi, fino al sistema di code messaggi per la comunicazione asincrona tra servizi.
+\newline
+\newline
+Il \textbf{Capitolo 4} riporta l'analisi sperimentale e la valutazione delle prestazioni del sistema sviluppato. Vengono presentate le metodologie di testing adottate, le metriche utilizzate per la valutazione (PSNR, SSIM, tempi di training), i risultati del confronto tra i diversi algoritmi e l'analisi delle prestazioni dell'architettura containerizzata, evidenziando i punti di forza e i risultati raggiunti.
+\newline
+\newline
+Il \textbf{Capitolo 5} discute le criticità emerse durante lo sviluppo e le limitazioni del sistema attuale. Vengono analizzate le limitazioni tecniche, le sfide architetturali legate alla gestione distribuita, le limitazioni intrinseche del Gaussian Splatting e le considerazioni relative alla scalabilità e ai costi operativi.
+\newline
+\newline
+Il \textbf{Capitolo 6} presenta le conclusioni del lavoro, riassumendo i risultati ottenuti e il raggiungimento degli obiettivi prefissati. Vengono delineati i possibili miglioramenti futuri, dalle ottimizzazioni algoritmiche all'integrazione di nuove tecniche come il 4D Gaussian Splatting, fino alle estensioni funzionali e alle considerazioni commerciali. Il capitolo si conclude con le lezioni apprese durante lo sviluppo del progetto.

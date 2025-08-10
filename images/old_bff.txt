@@ -1,0 +1,224 @@
+
+\subsection{Architettura e ruolo nel sistema}
+
+Il layer Backend-for-Frontend rappresenta il punto di ingresso unificato per tutte le interazioni da e verso i layer di orchestrazione e di storage. Implementato come servizio FastAPI containerizzato, fornisce un'interfaccia REST standardizzata che gestisce le interazioni tra frontend, database MongoDB, sistema di code RabbitMQ e storage S3.
+
+\subsection{Sistema di Autenticazione}
+
+L'API Gateway implementa un sistema di autenticazione ibrido che combina HTTP Basic Authentication per operazioni amministrative e JWT Bearer tokens per l'accesso utente standard.
+
+\begin{lstlisting}[language=python, caption=Implementazione sistema di autenticazione]
+	# HTTP Basic Authentication per operazioni admin
+	def verify_basic_auth(credentials: HTTPBasicCredentials = Security(security)):
+	valid_username = "admin"
+	valid_password = "supersecret"
+	
+	is_valid_username = secrets.compare_digest(credentials.username, valid_username)
+	is_valid_password = secrets.compare_digest(credentials.password, valid_password)
+	
+	if not (is_valid_username and is_valid_password):
+	raise HTTPException(status_code=401, detail="Invalid credentials")
+	
+	return credentials.username
+	
+	# JWT Token Authentication per utenti
+	@app.post("/token")
+	async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+	user = get_user(form_data.username)
+	if not user or not verify_password(form_data.password, user.hashed_password):
+	raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+	
+	access_token = create_access_token({"sub": user.username})
+	return {"access_token": access_token, "token_type": "bearer"}
+\end{lstlisting}
+
+\subsubsection{Gestione Utenti}
+
+Il sistema utilizza bcrypt per l'hashing delle password e implementa funzionalità complete di gestione utenti:
+
+\begin{lstlisting}[language=python, caption=Servizio gestione utenti]
+	def create_user(username: str, password: str, role: str = "user"):
+	hashed_password = hash_password(password)
+	user = UserInDB(username=username, hashed_password=hashed_password, role=role)
+	result = users_collection.insert_one(user.dict())
+	return str(result.inserted_id)
+	
+	def get_user(username: str):
+	user = users_collection.find_one({"username": username})
+	if user:
+	return UserInDB(**user)
+	return None
+\end{lstlisting}
+
+\subsection{CRUD Operations sui Modelli}
+
+Il layer Backend-for-Frontend espone un'interfaccia REST completa per la gestione dei modelli 3D, implementando operazioni di creazione, lettura, aggiornamento e cancellazione con funzionalità avanzate di paginazione, ordinamento e filtri.
+
+\subsubsection{Creazione Modelli}
+
+L'endpoint di creazione supporta tre modalità operative distinte:
+
+\begin{lstlisting}[language=python, caption=Endpoint creazione modello]
+	@app.post("/models/", response_model=ModelResponse, dependencies=[Depends(verify_basic_auth)])
+	async def create_model(request: ModelCreateRequest):
+	# Creazione modello in MongoDB
+	model = await model_service.create_model_in_db(request)
+	
+	# Invio job a RabbitMQ per avvio workflow
+	queue_job_service.send_job(model.id, model.current_phase)
+	
+	return model
+\end{lstlisting}
+
+\textbf{Modalità di creazione supportate}:
+\begin{enumerate}
+	\item \textbf{Creazione ex-novo}: Upload di nuovo video tramite presigned URL S3
+	\item \textbf{Fork da modello esistente}: Riutilizzo di fasi intermedie completate
+	\item \textbf{Retry}: Riavvio di modelli con fasi fallite
+\end{enumerate}
+
+\subsubsection{Implementazione Fork}
+
+La funzionalità di fork implementa una logica sofisticata di riutilizzo delle fasi intermedie:
+
+\begin{lstlisting}[language=python, caption=Logica di inizializzazione della fork]
+	 # 4. Determina fasi da copiare (fino a from_phase esclusa)
+	phase_order = ["frame_extraction", "point_cloud_building", "training"]
+	until_phase_idx = phase_order.index(current_phase)
+	phases_to_copy = phase_order[:until_phase_idx]
+	
+	# 5. Copia fasi come SKIPPED
+	skipped_phases = {}
+	for phase in phases_to_copy:
+	phase_str = phase if isinstance(phase, str) else phase.value
+	parent_phases_dict = {str(k): v for k, v in parent_model.phases.items()}
+	
+	if phase_str in parent_phases_dict:
+	parent_phase = parent_phases_dict[phase_str]
+	skipped_phases[phase_str] = {
+		"status": "SKIPPED",
+		"started_at": parent_phase.started_at,
+		"completed_at": parent_phase.completed_at,
+		"error_message": None,
+		"metadata": parent_phase.metadata,
+	}
+	
+	
+	# 6. Aggiungi fase from come PENDING
+	skipped_phases[current_phase] = {
+		"status": "PENDING",
+		"started_at": None,
+		"completed_at": None,
+		"error_message": None,
+		"metadata": None
+	}
+\end{lstlisting}
+
+\subsubsection{Gestione Retry}
+
+Il sistema di retry identifica automaticamente le fasi interrotte e le reimposta per una nuova esecuzione:
+
+\begin{lstlisting}[language=python, caption=Implementazione retry]
+@app.post("/models/{model_id}/retry", response_model=ModelResponse,dependencies=[Depends(verify_basic_auth)])
+	async def retry_model(model_id: str):
+	try:
+		# Recupera il modello esistente dal database
+		model = await 	model_service.update_model_for_retry(model_id)
+		
+		if not model:
+			raise HTTPException(status_code=404, detail="Model not found")
+		
+		queue_job_service.send_job(model.id, model.current_phase)
+		
+		return model
+	
+	except HTTPException:
+	# Re-raise HTTP exceptions (come 404)
+		raise
+	except Exception as e:
+		raise HTTPException(status_code=500, detail=str(e))
+\end{lstlisting}
+
+\subsubsection{Listing con paginazione avanzata}
+
+L'endpoint di listing implementa funzionalità di ricerca e navigazione:
+
+\begin{lstlisting}[language=python, caption=Endpoint listing modelli]
+@app.get("/models/", response_model=PaginatedModelResponse)
+	async def list_models(
+	page: int = Query(1, alias="page", ge=1),
+	limit: int = Query(10, alias="limit", ge=1, le=100),
+	sort_by: Optional[str] = Query(None, regex="^(model_name|status|created_at)$"),
+	order: Optional[str] = Query("asc", regex="^(asc|desc)$"),
+	title: Optional[str] = Query(None),
+	status: Optional[List[str]] = Query(None)
+	):
+		models, total_count = model_service.list_models_from_db(
+		page, limit, sort_by, order, title_filter=title, status_filter=status
+		)
+		
+		total_pages = (total_count + limit - 1) // limit
+		
+		return PaginatedModelResponse(
+		models=models,
+		totalCount=total_count,
+		totalPages=total_pages,
+		page=page
+	)
+\end{lstlisting}
+
+\subsection{Producer per sistema di workflow}
+
+L'API Gateway funge da producer primario per il sistema di code RabbitMQ, orchestrando l'avvio e la gestione dei workflow di elaborazione attraverso il QueueJobService.
+
+\begin{lstlisting}[language=python, caption=Integrazione con sistema di code]
+	# Invio job per nuovi modelli, retry e fork
+	queue_job_service.send_job(model.id, model.current_phase)
+\end{lstlisting}
+\newpage
+\subsubsection{Gestione Presigned URLs}
+
+Per ottimizzare l'upload di video di grandi dimensioni, l'API Gateway genera presigned URLs che permettono upload diretti a S3:
+
+\begin{lstlisting}[language=python, caption=Generazione presigned URL]
+	@app.post("/s3/upload-url/")
+	async def get_upload_url(request: PresignedUrlRequest):
+		upload_id = str(uuid4())
+		s3_key = f"{S3_VIDEOS_PREFIX}/{upload_id}/{request.filename}"
+	
+		presigned_url = repository_service.generate_presigned_url_upload(
+		s3_key, request.content_type
+		)
+	
+		return {
+			"upload_id": upload_id, 
+			"upload_url": presigned_url,
+			"video_s3_key": s3_key
+	}
+\end{lstlisting}
+
+\subsection{Sistema di Notifiche Real-time}
+
+L'API Gateway implementa un sistema di notifiche WebSocket per aggiornamenti real-time sullo stato dei modelli:
+
+\begin{lstlisting}[language=python, caption=WebSocket notifications]
+	@app.websocket("/ws/notifications")
+	async def websocket_notifications(websocket: WebSocket):
+	await websocket.accept()
+	active_connections.add(websocket)
+	
+	try:
+	while True:
+	data = await websocket.receive_text()
+	if data == "ping":
+	await websocket.send_text("pong")
+	except Exception as e:
+	print(f"WebSocket connection error: {e}")
+	finally:
+	active_connections.discard(websocket)
+	
+	async def notify_clients(change_data: dict):
+	await process_and_send_notification(change_data, active_connections)
+\end{lstlisting}
+
+L'API Gateway rappresenta quindi il cuore dell'architettura del sistema, fornendo un punto di accesso unificato e sicuro che orchestra tutte le operazioni di gestione dei modelli 3D, dall'upload iniziale alla distribuzione dei risultati finali.

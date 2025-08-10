@@ -1,0 +1,20 @@
+%%{init: {'theme':'neutral', 'themeVariables': { 'fontSize': '14px'}}}%%
+flowchart TD
+    A[Da Frame Extraction] --> B[Job Executor esegue<br/>Cloud Point Building]
+    B --> C{Successo?}
+    C -->|Sì| D[Insert job Training]
+    C -->|No| E[Modello marcato FAILED]
+    
+    D --> F[Job Executor esegue<br/>Training con algoritmo scelto]
+    F --> G{Successo?}
+    G -->|Sì| H[Insert job Upload]
+    G -->|No| E
+    
+    H --> I[Job Executor carica<br/>modello 3D su S3]
+    I --> J{Successo?}
+    J -->|Sì| K[Continua con<br/>Metrics Generation]
+    J -->|No| E
+    
+    style A fill:#fff3e0
+    style K fill:#fff3e0
+    style E fill:#ffcdd2

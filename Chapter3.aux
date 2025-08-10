@@ -1,0 +1,329 @@
+\relax 
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Implementazioni e tecnologie}{53}{}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\newlabel{chap:implementazione}{{3}{53}{Gestione dei Fallimenti}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.0.1}Stack Tecnologico Implementato}{53}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.0.1.1}Tecnologie Frontend}{53}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.0.1.2}Tecnologie di backend}{54}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.0.1.3}Infrastruttura e Persistenza}{54}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.0.1.4}Pre-elaborazione specializzata}{54}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.0.1.5}Algoritmi di Training integrati}{54}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.0.2}Servizi containerizzati}{55}{}\protected@file@percent }
+\newlabel{sec:servizi_containerizzati}{{3.0.2}{55}{Servizi containerizzati}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.0.2.1}Esempio di Dockerfile: Gaussian Splatting}{56}{}\protected@file@percent }
+\newlabel{lst:dockerfile_gs}{{3.1}{56}{Esempio di Dockerfile: Gaussian Splatting}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.1}{\ignorespaces Dockerfile per gaussian-splatting}}{56}{}\protected@file@percent }
+\newlabel{lst:dockerfile_api}{{3.2}{57}{Esempio di Dockerfile: Gaussian Splatting}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.2}{\ignorespaces Estensione API FastAPI per Gaussian Splatting}}{57}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Sistema di parametrizzazione adattiva per livelli di qualità e auto-scaling hardware}{58}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Struttura dei parametri}{58}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Processo di Calcolo Parametri}{59}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.3}Configurabilità e Sperimentazione}{59}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Workflow della generazione dei parametri adattivi}}{60}{}\protected@file@percent }
+\newlabel{fig:training_params_service_workflow}{{3.1}{60}{Processo di Calcolo Parametri}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Layer di Storage}{61}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}MongoDB - Database dei metadati}{61}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1.1}Collection "models"}{61}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.3}{\ignorespaces Struttura documento modello}}{61}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1.2}Collection \texttt  {"training\_params"}}{63}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.4}{\ignorespaces Struttura configurazione algoritmo}}{63}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1.3}Collection \texttt  {"users"}}{64}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.5}{\ignorespaces Struttura utente}}{64}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Amazon S3 - Object Storage}{64}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2.1}Organizzazione Bucket e Prefissi}{64}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2.2}Gestione contenuti per tipologia}{65}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Video sorgente (videos/)}{65}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.6}{\ignorespaces Generazione chiave video}}{65}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Modelli finali (delivery/)}{65}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.7}{\ignorespaces Upload modello finale}}{65}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Dati Intermedi (staging/)}{65}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.8}{\ignorespaces Pattern salvataggio fase intermedia}}{66}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2.3}Pattern di Accesso Ottimizzati}{66}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Workflow di elaborazione}{66}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.9}{\ignorespaces Pattern cache-first per dati S3}}{66}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Frontend Access Pattern}{67}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.10}{\ignorespaces Pattern accesso ibrido frontend}}{67}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Layer di Orchestrazione}{67}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Code di messaggi e configurazione RabbitMQ}{67}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.11}{\ignorespaces Definizione code specializzate per workflow}}{67}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1.1}Configurazione di persistenza e acknowledgment}{68}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1.2}Monitoraggio RabbitMQ}{68}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Interfaccia di gestione RabbitMQ - Vista code attive del sistema}}{68}{}\protected@file@percent }
+\newlabel{fig:rabbitmq_queues}{{3.2}{68}{Monitoraggio RabbitMQ}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Pattern Producer-Consumer ibrido}{69}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2.1}Architettura del Pattern}{69}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2.2}Meccanismo di Funzionamento}{69}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2.3}Vantaggi Architetturali}{70}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Schema del pattern Producer-Consumer ibrido implementato dal Job Executor}}{70}{}\protected@file@percent }
+\newlabel{fig:producer_consumer_schema}{{3.3}{70}{Vantaggi Architetturali}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Persistenza stati intermedi}{71}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3.1}Pattern di gestione dati intermedi}{71}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.12}{\ignorespaces Pattern recupero e salvataggio dati intermedi}}{71}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3.2}Funzionalità di Fork e Retry}{71}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3.3}Gestione fasi secondarie}{71}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.4}Resilienza e Fault Tolerance}{72}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.4.1}Strategie di Error Handling}{72}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.4.2}Meccanismi di Persistenza degli Stati}{72}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.4.3}Database Monitoring}{73}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Layer di Pre-elaborazione}{73}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}Architettura del Layer}{73}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1.1}Strategia di Containerizzazione Differenziata}{73}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}Video Preprocessing Service}{74}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2.1}Pipeline di Preprocessing Video}{74}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{1) Download e Validazione}{74}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{2) Analisi Metadati Video}{75}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.13}{\ignorespaces Analisi metadati video completa}}{75}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{3) Adattamento Orientamento}{75}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.14}{\ignorespaces Logica di adattamento orientamento}}{75}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{4) Calibrazione FPS per Target Frame}{75}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.15}{\ignorespaces Algoritmo di calibrazione FPS}}{75}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{5) Estrazione Frame con Sharp-Frames}{76}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.16}{\ignorespaces Configurazione Sharp-Frames ottimizzata}}{76}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{6) Finalizzazione e Persistenza}{76}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Schema del estrazione frames da video}}{77}{}\protected@file@percent }
+\newlabel{fig:frame_extraction_diagram}{{3.4}{77}{6) Finalizzazione e Persistenza}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.3}Point Cloud Reconstruction Service}{78}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.3.1}Handler Point Cloud Building}{78}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Recupero Dataset e Validazione}{78}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Generazione Point Cloud via COLMAP}{78}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.17}{\ignorespaces Generazione point cloud con monitoraggio performance}}{78}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.3.2}Strategie di Feature Matching: Analisi Comparativa}{78}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.3.3}Pipeline di Ricostruzione Ottimizzata}{79}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.4}Integrazione e Coordinamento}{79}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.4.1}Flusso di Dati tra Servizi}{79}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.4.2}Gestione Metadati e Performance}{79}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}Layer di Training}{80}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.1}Architettura containerizzata multi-algoritmo}{80}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.2}Handler Training}{80}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.2.1}Recupero Dataset e Configurazione}{80}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.18}{\ignorespaces Inizializzazione e configurazione training}}{80}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.2.2}Depth Regularization per Gaussian Splatting standard}{81}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.19}{\ignorespaces Endpoint depth regularization}}{81}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.2.3}Esecuzione Training}{82}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.20}{\ignorespaces Esecuzione training con engine selezionato}}{82}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.2.4}Finalizzazione e Metadati}{83}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.21}{\ignorespaces Finalizzazione training con metadati estesi}}{83}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.3}Interfaccia API REST unificata}{84}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.3.1}Standardizzazione degli endpoint}{84}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.22}{\ignorespaces Definizione modelli dati per API REST}}{84}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.3.2}Gestione parametri dinamica}{84}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.23}{\ignorespaces Costruzione dinamica comando di training}}{84}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.3.3}Endpoint Specializzati}{85}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.4}Handler Metrics Generation}{85}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.4.1}Inizializzazione e Validazione Output}{86}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.24}{\ignorespaces Inizializzazione e validazione output training}}{86}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.4.2}Generazione render e calcolo metriche}{86}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.25}{\ignorespaces Generazione render e calcolo metriche}}{86}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.4.3}Finalizzazione e Persistenza Metriche}{87}{}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.26}{\ignorespaces Persistenza metriche e completamento workflow}}{87}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.6}Layer Backend-for-Frontend}{87}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.1}Architettura e Funzionalità Principali}{87}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces Architettura del layer Backend-for-Frontend}}{88}{}\protected@file@percent }
+\newlabel{fig:bff_architecture}{{3.5}{88}{Architettura e Funzionalità Principali}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.2}Riepilogo Endpoint REST e WebSocket}{88}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Principali endpoint esposti dall’API Gateway}}{88}{}\protected@file@percent }
+\newlabel{tab:endpoint_bff}{{3.1}{88}{Riepilogo Endpoint REST e WebSocket}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.3}Logica e Flussi Principali degli Endpoint}{88}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3.1}Registrazione e Autenticazione}{88}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3.2}Gestione Modelli 3D}{89}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3.3}Gestione Upload Video}{89}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3.4}Notifiche Real-time}{89}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3.5}Endpoint di Servizio}{89}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.4}Autenticazione e Sicurezza}{89}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.5}Creazione, fork e retry di un modello}{90}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces Diagramma per creazione e fork modello}}{90}{}\protected@file@percent }
+\newlabel{fig:create_or_fork_diagram}{{3.6}{90}{Creazione, fork e retry di un modello}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.7}{\ignorespaces Diagramma per retry del modello}}{91}{}\protected@file@percent }
+\newlabel{fig:retry_diagram}{{3.7}{91}{Creazione, fork e retry di un modello}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.6}Notifiche push in real-time}{92}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.8}{\ignorespaces Flusso per notifiche push in real-time}}{92}{}\protected@file@percent }
+\newlabel{fig:push_notification}{{3.8}{92}{Notifiche push in real-time}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.7}Considerazioni e Best Practice}{92}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.7}Layer di Presentazione}{92}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.1}Architettura dell'interfaccia utente}{92}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.7.1.1}Dashboard Principale}{92}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.9}{\ignorespaces Dashboard principale con vista a griglia dei modelli, filtri di ricerca e indicatori di stato}}{93}{}\protected@file@percent }
+\newlabel{fig:dashboard_main}{{3.9}{93}{Dashboard Principale}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.7.1.2}Gestione del Workflow Utente}{94}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Creazione di un nuovo modello}{94}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Fork di un modello preesistente}{94}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Retry intelligente}{94}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.2}Sistema di notifiche real-time}{94}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces Dialog di creazione nuovo modello con selezione engine e configurazione qualità tramite slider interattivo}}{95}{}\protected@file@percent }
+\newlabel{fig:new_model_dialog}{{3.10}{95}{Creazione di un nuovo modello}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.11}{\ignorespaces Dialog di reprocessing che mostra la selezione della fase di partenza e le fasi che verranno riutilizzate}}{96}{}\protected@file@percent }
+\newlabel{fig:fork_dialog}{{3.11}{96}{Fork di un modello preesistente}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.7.2.1}Architettura delle Notifiche}{97}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.12}{\ignorespaces Sistema di notifiche con drawer laterale che mostra lo storico degli eventi e badge per notifiche non lette}}{97}{}\protected@file@percent }
+\newlabel{fig:notification_drawer}{{3.12}{97}{Architettura delle Notifiche}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.7.2.2}Gestione stati di connessione}{97}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.13}{\ignorespaces Vista espansa delle metriche di qualità (SSIM, PSNR, LPIPS) per confronto rapido tra modelli}}{98}{}\protected@file@percent }
+\newlabel{fig:dashboard_metrics}{{3.13}{98}{Gestione stati di connessione}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.3}Visualizzatore 3D Integrato}{98}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.7.3.1}Tecnologia di Rendering}{98}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.7.3.2}Interfaccia del Viewer}{99}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Overlay Informativo}{99}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.14}{\ignorespaces Visualizzatore 3D integrato con overlay informativo mostrante FPS, numero di splat e metriche di qualità}}{99}{}\protected@file@percent }
+\newlabel{fig:viewer3d_examples}{{3.14}{99}{Overlay Informativo}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Controlli Camera}{99}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Gestione formati}{99}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.15}{\ignorespaces Visualizzazione di un modello complesso (Japanese garden) con rendering real-time a 60 FPS}}{100}{}\protected@file@percent }
+\newlabel{fig:viewer3d_complex}{{3.15}{100}{Gestione formati}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.4}Ottimizzazione performance e UX}{100}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Lazy Loading}{100}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Caching intelligente}{100}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Responsive Design}{100}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.5}Integrazione con il Backend}{100}{}\protected@file@percent }
+\@setckpt{Chapter3}{
+\setcounter{page}{102}
+\setcounter{equation}{0}
+\setcounter{enumi}{3}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{7}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{chapter}{3}
+\setcounter{section}{7}
+\setcounter{subsection}{5}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{15}
+\setcounter{table}{1}
+\setcounter{parentequation}{0}
+\setcounter{float@type}{16}
+\setcounter{lstnumber}{9}
+\setcounter{caption@flags}{2}
+\setcounter{continuedfloat}{0}
+\setcounter{subfigure}{0}
+\setcounter{subtable}{0}
+\setcounter{tcbbreakpart}{0}
+\setcounter{tcblayer}{0}
+\setcounter{tcolorbox@number}{0}
+\setcounter{r@tfl@t}{0}
+\setcounter{nlinenum}{0}
+\setcounter{tabx@nest}{0}
+\setcounter{listtotal}{0}
+\setcounter{listcount}{0}
+\setcounter{liststart}{0}
+\setcounter{liststop}{0}
+\setcounter{citecount}{0}
+\setcounter{citetotal}{0}
+\setcounter{multicitecount}{0}
+\setcounter{multicitetotal}{0}
+\setcounter{instcount}{18}
+\setcounter{maxnames}{3}
+\setcounter{minnames}{1}
+\setcounter{maxitems}{3}
+\setcounter{minitems}{1}
+\setcounter{citecounter}{0}
+\setcounter{maxcitecounter}{0}
+\setcounter{savedcitecounter}{0}
+\setcounter{uniquelist}{0}
+\setcounter{uniquename}{0}
+\setcounter{refsection}{0}
+\setcounter{refsegment}{0}
+\setcounter{maxextratitle}{0}
+\setcounter{maxextratitleyear}{0}
+\setcounter{maxextraname}{4}
+\setcounter{maxextradate}{0}
+\setcounter{maxextraalpha}{0}
+\setcounter{abbrvpenalty}{50}
+\setcounter{highnamepenalty}{50}
+\setcounter{lownamepenalty}{25}
+\setcounter{maxparens}{3}
+\setcounter{parenlevel}{0}
+\setcounter{blx@maxsection}{0}
+\setcounter{mincomprange}{10}
+\setcounter{maxcomprange}{100000}
+\setcounter{mincompwidth}{1}
+\setcounter{afterword}{0}
+\setcounter{savedafterword}{0}
+\setcounter{annotator}{0}
+\setcounter{savedannotator}{0}
+\setcounter{author}{0}
+\setcounter{savedauthor}{0}
+\setcounter{bookauthor}{0}
+\setcounter{savedbookauthor}{0}
+\setcounter{commentator}{0}
+\setcounter{savedcommentator}{0}
+\setcounter{editor}{0}
+\setcounter{savededitor}{0}
+\setcounter{editora}{0}
+\setcounter{savededitora}{0}
+\setcounter{editorb}{0}
+\setcounter{savededitorb}{0}
+\setcounter{editorc}{0}
+\setcounter{savededitorc}{0}
+\setcounter{foreword}{0}
+\setcounter{savedforeword}{0}
+\setcounter{holder}{0}
+\setcounter{savedholder}{0}
+\setcounter{introduction}{0}
+\setcounter{savedintroduction}{0}
+\setcounter{namea}{0}
+\setcounter{savednamea}{0}
+\setcounter{nameb}{0}
+\setcounter{savednameb}{0}
+\setcounter{namec}{0}
+\setcounter{savednamec}{0}
+\setcounter{translator}{0}
+\setcounter{savedtranslator}{0}
+\setcounter{shortauthor}{0}
+\setcounter{savedshortauthor}{0}
+\setcounter{shorteditor}{0}
+\setcounter{savedshorteditor}{0}
+\setcounter{labelname}{0}
+\setcounter{savedlabelname}{0}
+\setcounter{institution}{0}
+\setcounter{savedinstitution}{0}
+\setcounter{lista}{0}
+\setcounter{savedlista}{0}
+\setcounter{listb}{0}
+\setcounter{savedlistb}{0}
+\setcounter{listc}{0}
+\setcounter{savedlistc}{0}
+\setcounter{listd}{0}
+\setcounter{savedlistd}{0}
+\setcounter{liste}{0}
+\setcounter{savedliste}{0}
+\setcounter{listf}{0}
+\setcounter{savedlistf}{0}
+\setcounter{location}{0}
+\setcounter{savedlocation}{0}
+\setcounter{organization}{0}
+\setcounter{savedorganization}{0}
+\setcounter{origlocation}{0}
+\setcounter{savedoriglocation}{0}
+\setcounter{origpublisher}{0}
+\setcounter{savedorigpublisher}{0}
+\setcounter{publisher}{0}
+\setcounter{savedpublisher}{0}
+\setcounter{language}{0}
+\setcounter{savedlanguage}{0}
+\setcounter{origlanguage}{0}
+\setcounter{savedoriglanguage}{0}
+\setcounter{pageref}{0}
+\setcounter{savedpageref}{0}
+\setcounter{textcitecount}{0}
+\setcounter{textcitetotal}{0}
+\setcounter{textcitemaxnames}{0}
+\setcounter{biburlbigbreakpenalty}{100}
+\setcounter{biburlbreakpenalty}{200}
+\setcounter{biburlnumpenalty}{0}
+\setcounter{biburlucpenalty}{0}
+\setcounter{biburllcpenalty}{0}
+\setcounter{smartand}{1}
+\setcounter{bbx:relatedcount}{0}
+\setcounter{bbx:relatedtotal}{0}
+\setcounter{AlgoLine}{0}
+\setcounter{algocfline}{1}
+\setcounter{algocfproc}{1}
+\setcounter{algocf}{1}
+\setcounter{innercustomgeneric}{0}
+\setcounter{lstlisting}{26}
+}
