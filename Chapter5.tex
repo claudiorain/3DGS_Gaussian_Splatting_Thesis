@@ -3,7 +3,7 @@
 \section{Limitazioni e criticità}
 
 \subsection{Acquisizione dei dati}
-\subsubsection{Copertura e qualità delle riprese.}
+\subsubsection{Copertura e qualità delle riprese}
 La fase di acquisizione video si è rivelata complessa, soprattutto nel garantire una copertura completa delle varie angolazioni di un oggetto o di una scena.  
 In diversi casi è stato necessario ripetere le riprese a causa della mancanza di dettagli in certe aree, specialmente per oggetti di grandi dimensioni (es. tetto della libreria nel castello), con conseguente degrado della qualità visiva complessiva del modello.  
 Tale criticità è rilevante anche in considerazione della durata delle fasi di training, che può raggiungere le 1--2 ore per singolo modello.
@@ -28,10 +28,9 @@ Quest'ultima ha fornito metodologie più robuste, ma richiedenti comunque una pa
 \paragraph{Possibili miglioramenti:}
 \begin{itemize}
 	\item Adozione di algoritmi di estrazione adattiva, che selezionino i frame in base alla variazione di contenuto (\emph{content variation}) piuttosto che a intervalli temporali fissi, utilizzando metriche come l'indice di similarità strutturale (SSIM) o l'analisi del movimento.
-	\item Implementazione di un sistema di pre-filtraggio automatico dei frame estratti, in grado di scartare quelli mossi, sfocati o sotto/sovraesposti, al fine di migliorare la qualità dei dati in ingresso al processo di training.
 	\item Sperimentazione di tecniche di intelligenza artificiale per l'estrazione \emph{content-aware}, capaci di identificare in modo automatico i frame più rappresentativi della scena in funzione della ricostruzione 3D, eventualmente addestrando modelli leggeri su dataset specifici del dominio.
 \end{itemize}
-
+\newpage
 \subsection{Limitazioni hardware e scalabilità}
 \subsubsection{Risorse limitate}
 L'hardware a disposizione non era ottimale: la GPU NVIDIA RTX 4080 con 16 GB di VRAM si è rivelata inferiore ai 24 GB consigliati per le configurazioni di riferimento.  
@@ -61,7 +60,7 @@ Questo ha ridotto la possibilità di sperimentare configurazioni più spinte, so
 \begin{itemize}
 	\item Potenziamento delle risorse hardware, come descritto nella sottosezione precedente, per ampliare i margini di parametrizzazione.
 	\item Ottimizzazione degli algoritmi di training per ridurre l'uso di memoria e migliorare l'efficienza computazionale, ad esempio mediante gestione dinamica dei batch e compressione temporanea delle strutture dati.
-	\item \item Introduzione di una parametrizzazione adattiva, in cui il sistema regoli automaticamente i parametri di qualità (es. risoluzione, numero di gaussiane, ordine degli armonici sferici) in funzione delle risorse disponibili, minimizzando il rischio di errori \emph{Out-Of-Memory}.  
+	 \item Introduzione di una parametrizzazione adattiva, in cui il sistema regoli automaticamente i parametri di qualità (es. risoluzione, numero di gaussiane, ordine degli armonici sferici) in funzione delle risorse disponibili, minimizzando il rischio di errori \emph{Out-Of-Memory}.  
 	Nel sistema sviluppato è già stata implementata una forma di parametrizzazione adattiva, ma i risultati ottenuti non si sono rivelati pienamente soddisfacenti, indicando la necessità di ulteriori ottimizzazioni per migliorare l'efficacia e la stabilità di questo approccio.
 	
 \end{itemize}
@@ -152,9 +151,6 @@ In altri, si tratta di estensioni concettuali e applicative che aprono a nuovi s
 Di seguito si elencano alcune direzioni di sviluppo ritenute particolarmente promettenti:
 
 \begin{enumerate}
-	\item \textbf{Estensione a Gaussian Splatting 4D}  
-	Evoluzione del modello attuale verso il \emph{4D Gaussian Splatting}, in cui la quarta dimensione è il tempo.  
-	Questa tecnica consente di rappresentare scene dinamiche, in cui le gaussiane variano posizione, colore o opacità nel tempo, aprendo la strada ad applicazioni come video volumetrici, cattura di movimenti e ricostruzioni di eventi in tempo reale.
 	
 	\item \textbf{Analisi video assistita da intelligenza artificiale}  
 	Sviluppo di un modulo in grado di analizzare il video acquisito, valutando copertura spaziale e temporale e segnalando eventuali zone non riprese.  

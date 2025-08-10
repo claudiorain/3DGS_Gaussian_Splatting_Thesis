@@ -21,84 +21,29 @@ La valutazione sperimentale del sistema è stata strutturata per analizzare sia 
 
 Per garantire una valutazione comprensiva del sistema, è stato definito un set strutturato di scene reali che copre diversi livelli di complessità geometrica, ambientale e di ripresa. \textbf{Tutti i video sono stati acquisiti in risoluzione 4K (3840×2160) a 30 fps tramite la fotocamera di uno smartphone gamma medio-alta, cercando di garantire la massima qualità del dataset di partenza}, prima delle successive fasi di preprocessing adattivo.
 
-\subsubsection{Categorizzazione delle Scene Video}
-
-\textbf{S1 - Scene Geometriche Semplici}
-\begin{itemize}
-	\item \textbf{Spring Rider} (360°, Outdoor): Forme geometriche elementari con colori uniformi
-	\begin{itemize}
-		\item Durata: 1 minuto e 10 secondi
-		\item Dimensione file: 345.569 KB
-	\end{itemize}
-	
-	\item \textbf{Lego Japanese Garden} (180°, Indoor): Oggetto con geometrie regolari ma dettagli architetturali
-	\begin{itemize}
-		\item Durata: 1 minuto e 38 secondi  
-		\item Dimensione file: 607.327 KB
-	\end{itemize}
-\end{itemize}
-
-\textbf{S2 - Scene Multi-Oggetto}
-\begin{itemize}
-	\item \textbf{Master of Puppets} (180°, Indoor): Collezione di peluche con occlusioni multiple
-	\begin{itemize}
-		\item Durata: 1 minuto e 34 secondi
-		\item Dimensione file: 579.644 KB
-	\end{itemize}
-	
-	\item \textbf{Multiple Objects} (180°, Indoor): Lego garden + oggetti accessori, occlusioni ridotte  
-	\begin{itemize}
-		\item Durata: 1 minuto e 21 secondi
-		\item Dimensione file: 498.843 KB
-	\end{itemize}
-	
-	\item \textbf{Wall Plants} (240°, Outdoor): Struttura + pianta, combinazione artificiale/naturale
-	\begin{itemize}
-		\item Durata: 1 minuto e 8 secondi
-		\item Dimensione file: 421.296 KB
-	\end{itemize}
-\end{itemize}
-
-\textbf{S3 - Scene ad Alta Complessità}
-\begin{itemize}
-	\item \textbf{Yellow Plant} (360°, Outdoor): Dettagli fini naturali, illuminazione variabile
-	\begin{itemize}
-		\item Durata: 1 minuto e 40 secondi
-		\item Dimensione file: 566.772 KB
-	\end{itemize}
-	
-	\item \textbf{Lego Display Window} (360°, Indoor): Oggetti multipli in spazio confinato
-	\begin{itemize}
-		\item Durata: 1 minuto e 18 secondi
-		\item Dimensione file: 479.009 KB
-	\end{itemize}
-	
-	\item \textbf{My Workstation} (180°, Indoor): Ambiente complesso (TV, PC, mobili)
-	\begin{itemize}
-		\item Durata: 1 minuto e 14 secondi
-		\item Dimensione file: 457.335 KB
-	\end{itemize}
-\end{itemize}
 
 \begin{table}[htbp]
 	\centering
-	\caption{Caratteristiche dei video del dataset utilizzato}
-	\label{tab:video_dataset_caratteristiche}
-	\begin{tabular}{|p{3cm}|c|c|c|c|p{2.5cm}|}
-		\hline
-		\textbf{Scena} & \textbf{Durata} & \textbf{Dimensione} & \textbf{Ambiente} & \textbf{Angolo} & \textbf{Tipologia} \\
-		\hline
-		Spring Rider & 00:01:10 & 345.569 KB & Outdoor & 360° & Oggetto Singolo \\
-		Lego Japanese Garden & 00:01:38 & 607.327 KB & Indoor & 180° & Oggetto Singolo \\
-		Master of Puppets & 00:01:34 & 579.644 KB & Indoor & 180° & Multi-Oggetto \\
-		Multiple Objects & 00:01:21 & 498.843 KB & Indoor & 180° & Multi-Oggetto \\
-		Wall Plants & 00:01:08 & 421.296 KB & Outdoor & 240° & Misto \\
-		Yellow Plant & 00:01:40 & 566.772 KB & Outdoor & 360° & Naturale \\
-		Lego Display Window & 00:01:18 & 479.009 KB & Indoor & 360° & Multi-Oggetto \\
-		My Workstation & 00:01:14 & 457.335 KB & Indoor & 180° & Ambiente Complesso \\
-		\hline
-	\end{tabular}
+	\footnotesize
+	\begin{tabularx}{\textwidth}{l l l c c c X}
+		\toprule
+		ID & Scena & Ambiente & Cop. & Compl. & Durata & Note \\
+		\midrule
+		S1 & Spring Rider & Outdoor & 360° & C3 & 1:10 & Geometria semplice ma fotometria complessa; \(\sim 3\times10^6\) gaussiane. \\
+		S2 & Lego Japanese Garden & Indoor & 180° & C2 & 1:38 & Dettagli architetturali; occlusioni ridotte. \\
+		S3 & Master of Puppets & Indoor & 180° & C3 & 1:34 & Peluche, texture ad alta freq., occlusioni multiple. \\
+		S4 & Multiple Objects & Indoor & 180° & C2 & 1:21 & Lego + oggetti accessori; occlusioni contenute. \\
+		S5 & Wall Plants & Outdoor & 240° & C3 & 1:08 & Artificiale + vegetazione; luce variabile. \\
+		S6 & Yellow Plant & Outdoor & 360° & C3 & 1:40 & Dettagli naturali fini (foglie/rami). \\
+		S7 & Lego Display Window & Indoor & 360° & C2+ & 1:18 & Spazio confinato, molti oggetti; occlusioni moderate. \\
+		S8 & My Workstation & Indoor & 180° & C2 & 1:14 & Ambiente abitazione; schermo con dettagli fini, complessità media. \\
+		S9 & Tomatoes & Outdoor & 180° & C3 & 1:14 & Fogliame con dettagli fini, complessità alta. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Codifica scene e complessità (C1=semplice, C2=media, C3=alta).}
 \end{table}
+
+
 
 \subsection{Pipeline di Preprocessing e Adattamento Hardware}
 \label{subsec:pipeline_preprocessing}
@@ -109,7 +54,7 @@ Il sistema implementa una \textbf{pipeline di preprocessing adattiva} che trasfo
 
 \label{subsubsec:depth_regularization}
 
-Il sistema implementa automaticamente una fase di \textbf{depth regularization} esclusivamente per l'algoritmo INRIA (Standard 3DGS), utilizzando il modello Depth Anything V2 per generare depth maps di supporto al training.
+Il sistema implementa automaticamente una fase di \textbf{depth regularization} esclusivamente per l'algoritmo INRIA (Standard 3DGS), utilizzando il modello Depth Anything V2\footnote{https://github.com/DepthAnything/Depth-Anything-V2} per generare depth maps di supporto al training.
 
 \paragraph{Pipeline Depth Regularization}
 \begin{enumerate}
@@ -118,7 +63,8 @@ Il sistema implementa automaticamente una fase di \textbf{depth regularization} 
 	\item \textbf{Training Depth-Aware}: Integrazione dei vincoli geometrici nel processo di ottimizzazione gaussiana
 \end{enumerate}
 
-\paragraph{Motivazioni della Scelta Algoritmo-Specifica}
+
+\paragraph{Motivazioni della scelta algoritmo-specifica}
 \begin{itemize}
 	\item \textbf{INRIA necessita supporto geometrico}: L'algoritmo originale può beneficiare di prior geometrici per scene complesse
 	\item \textbf{MCMC e Taming sono auto-sufficienti}: Questi algoritmi incorporano meccanismi interni di regolarizzazione spaziale
@@ -129,13 +75,13 @@ Il sistema implementa automaticamente una fase di \textbf{depth regularization} 
 	La depth regularization introduce una \textbf{variabile confondente} nei confronti diretti tra algoritmi. I risultati INRIA nei benchmark includeranno sempre depth regularization, rendendo i confronti non perfettamente equi. Questo riflette tuttavia l'utilizzo ottimale di ciascun algoritmo nelle condizioni reali di deployment.
 \end{tcolorbox}
 
-\subsubsection{Post-Processing: Conversione PLY→KSPLAT e Variante Taming}
+\subsubsection{Post-Processing: Conversione PLY→KSPLAT e adattamento Taming}
 
 Il sistema implementa la \textbf{conversione PLY→KSPLAT} per tutti gli algoritmi di training. Tutti gli algoritmi generano output in formato PLY standard, che viene convertito nel formato KSPLAT per ottenere file significativamente più compatti e ottimizzati per la visualizzazione web.
 
-\textbf{Variante Specifica Taming}: Durante la conversione standard PLY→KSPLAT, l'algoritmo Taming richiede un'ulteriore trasformazione dei valori di opacity. Taming genera valori di opacity in formato sigmoid che necessitano di conversione per compatibilità ottimale con i viewer 3D.
+\textbf{Adattamento conversione Taming}: durante la conversione standard PLY→KSPLAT, l'algoritmo Taming richiede un'ulteriore trasformazione dei valori di opacity. Taming genera valori di opacity in formato sigmoid che necessitano di conversione per compatibilità ottimale con i viewer 3D.
 
-\textbf{Trasformazione Implementata}: Per l'output Taming, viene applicata automaticamente una trasformazione inverse sigmoid (logit) durante la fase di conversione:
+\textbf{Trasformazione implementata}: Per l'output Taming, viene applicata automaticamente una trasformazione inverse sigmoid (logit) durante la fase di conversione:
 \begin{lstlisting}[language=Python, caption=Conversione opacity per Taming]
 	logit_opacity = log(opacity / (1.0 - opacity))
 \end{lstlisting}
@@ -185,12 +131,12 @@ Per caratterizzare accuratamente il comportamento degli algoritmi sotto vincoli 
 
 \paragraph{Implementazione Tecnica}
 \begin{itemize}
-	\item \textbf{Sampling Rate}: 3 secondi per bilanciare granularità e overhead
-	\item \textbf{Host-Level Monitoring}: Raccolta diretta da GPU driver, indipendente dai container
-	\item \textbf{Persistenza Automatica}: Integrazione nei metadati del workflow per analisi retrospettive
+	\item \textbf{Sampling Rate}: 2 secondi per bilanciare granularità e overhead
+	\item \textbf{Host-Level monitoring}: Raccolta diretta da GPU driver, indipendente dai container
+	\item \textbf{Persistenza automatica}: Integrazione nei metadati del workflow per analisi retrospettive
 \end{itemize}
-
-\subsection{Metodologia di Valutazione}
+\newpage
+\subsection{Metodologia di valutazione}
 \label{subsec:metodologia_valutazione}
 
 \subsubsection{Metriche Quantitative Automatizzate}
@@ -227,7 +173,7 @@ Il sistema implementa automaticamente il calcolo delle tre metriche standard per
 
 Il primo benchmark ha l’obiettivo di confrontare le tre varianti di 3D Gaussian Splatting considerate in questa tesi — INRIA (implementazione standard con \textit{depth regularization}), MCMC 3DGS e Taming 3DGS — valutandone prestazioni, scalabilità e qualità visiva. 
 Il test è stato condotto su tre scene di riferimento: \textbf{S1} \textit{Spring Rider}, caratterizzata da geometria semplice e ripresa a 360° in ambiente outdoor; \textbf{S2} \textit{Tomatoes}, con dettagli organici fini, ideale per analizzare l’impatto dell’aumento di risoluzione; e \textbf{S3} \textit{My Workstation}, una scena indoor complessa con oggetti multipli.
-
+\newpage
 L’analisi mira a:
 \begin{itemize}
 	\item identificare punti di forza e debolezza di ciascun approccio;
@@ -250,8 +196,8 @@ Le sottosezioni seguenti presentano:
 \paragraph{Scene di test:} 
 \begin{itemize}
 	\item \textbf{S1} -- Spring Rider: geometria semplice, outdoor, 360°
-	\item \textbf{S2} -- Tomatoes: dettagli organici fini, ideale per test di upscaling
-	\item \textbf{S3} -- My Workstation: indoor complesso, oggetti multipli
+	\item \textbf{S8} -- My Workstation: indoor complesso, oggetti multipli
+	\item \textbf{S9} -- Tomatoes: dettagli organici fini, ideale per test di upscaling
 \end{itemize}
 
 % ---------------------------------------------------
@@ -296,7 +242,7 @@ Le sottosezioni seguenti presentano:
 \paragraph{Metriche medie (S1 + S3, profilo \textit{Balanced})}
 \begin{table}[H]
 	\centering
-	\caption{Metriche medie su scene rappresentative}
+	\caption{Metriche su scena Spring Rider - S1}
 	\label{tab:benchmark1_metrics_avg}
 	\begin{tabularx}{0.9\linewidth}{l Y Y Y Y Y Y}
 		\toprule
@@ -309,10 +255,10 @@ Le sottosezioni seguenti presentano:
 	\end{tabularx}
 \end{table}
 
-\paragraph{Qualità alla massima risoluzione stabile (S2)}
-MCMC e Taming raggiungono 1080p nella maggior parte dei casi, ma possono manifestare degrado prestazionale o crash per spike di VRAM. INRIA si ferma stabilmente a 720p.
+\paragraph{Qualità alla massima risoluzione stabile (S9 - Tomatoes)}
+MCMC e Taming raggiungono 1080p nella maggior parte dei casi, ma a questa risoluzione possono manifestare spike di VRAM e conseguente crash per Out-of-Memory. INRIA si ferma stabilmente a 720p.
 
-\begin{table}[H]
+\begin{table}[!htbp]
 	\centering
 	\caption{Qualità alla massima risoluzione stabile}
 	\label{tab:benchmark1_resolution_quality}
@@ -326,10 +272,12 @@ MCMC e Taming raggiungono 1080p nella maggior parte dei casi, ma possono manifes
 		\bottomrule
 	\end{tabularx}
 \end{table}
+\raggedbottom
 
 \paragraph{Andamento utilizzo VRAM per risoluzione}
 L’analisi dell’andamento temporale dell’utilizzo di memoria video evidenzia differenze significative tra algoritmi e risoluzioni.
-I punti contrassegnati come \textbf{OOM} indicano un arresto o degrado grave dovuto al superamento del limite di VRAM disponibile.
+I punti contrassegnati come \textbf{OOM} indicano oversubscription con trasferimenti frequenti tra VRAM e RAM (thrashing) che rallentano drasticamente le iterazioni oppure un errore di memoria (OOM) con il processo che si arresta (spike).
+
 
 % Preambolo (assicurati di avere già)
 % \usepackage{pgfplots}
@@ -339,6 +287,7 @@ I punti contrassegnati come \textbf{OOM} indicano un arresto o degrado grave dov
 % \definecolor{inriacol}{RGB}{60,60,60}
 % \definecolor{mcmccol}{RGB}{200,40,40}
 % \definecolor{tamingcol}{RGB}{20,140,70}
+
 
 \begin{figure}[H]
 	\centering
@@ -390,7 +339,7 @@ I punti contrassegnati come \textbf{OOM} indicano un arresto o degrado grave dov
 	\small\ref{leg:vram}
 	
 	\caption{Profilo di utilizzo VRAM nel tempo su \textbf{S2 Tomatoes}, per risoluzioni crescenti e algoritmi (INRIA/MCMC/Taming).
-		I marker rossi indicano spike di VRAM associati a degrado prestazionale o arresto del training (non sempre OOM “hard”).}
+		I marker rossi indicano spike di VRAM associati a thrashing o arresto del training (non sempre OOM “hard”).}
 	\label{fig:tomatoes_vram_profiles}
 \end{figure}
   
@@ -407,7 +356,7 @@ I punti contrassegnati come \textbf{OOM} indicano un arresto o degrado grave dov
 	\includegraphics[width=0.32\textwidth,height=2.8cm,trim={80 40 80 40},clip]{images/benchmarks/spring_rider_inria_balanced_2.jpg}
 	\includegraphics[width=0.32\textwidth,height=2.8cm,trim={80 40 80 40},clip]{images/benchmarks/spring_rider_mcmc_balanced_2.jpg}
 	\includegraphics[width=0.32\textwidth,height=2.8cm,trim={80 40 80 40},clip]{images/benchmarks/spring_rider_taming_balanced_2.jpg}
-	\caption{Confronto visivo Spring Rider (crop centrale) -- INRIA / MCMC / Taming}
+	\caption{Confronto visivo S1 - Spring Rider (crop centrale) -- INRIA / MCMC / Taming}
 	\label{fig:spring_rider_comparison}
 \end{figure}
 
@@ -420,7 +369,7 @@ I punti contrassegnati come \textbf{OOM} indicano un arresto o degrado grave dov
 		\includegraphics[width=0.32\textwidth,height=2.8cm,trim={80 40 80 40},clip]{images/benchmarks/my_workstation_inria_balanced_2.jpg}
 	\includegraphics[width=0.32\textwidth,height=2.8cm,trim={80 40 80 40},clip]{images/benchmarks/my_workstation_mcmc_balanced_2.jpg}
 	\includegraphics[width=0.32\textwidth,height=2.8cm,trim={80 40 80 40},clip]{images/benchmarks/my_workstation_taming_balanced_2.jpg}
-	\caption{Confronto visivo My workstation (crop centrale) -- INRIA / MCMC / Taming}
+	\caption{Confronto visivo S8 - My workstation (crop centrale) -- INRIA / MCMC / Taming}
 	\label{fig:my_workstation_comparison}
 \end{figure}
 
@@ -458,6 +407,7 @@ I punti contrassegnati come \textbf{OOM} indicano un arresto o degrado grave dov
 	\item \textbf{INRIA} -- Baseline veloce e leggera: utile per prototipazione rapida o scene semplici.
 \end{itemize}
 
+\newpage
 % ---------------------------------------------------
 \subsubsection*{5. Appendice visiva}
 
@@ -481,7 +431,7 @@ I punti contrassegnati come \textbf{OOM} indicano un arresto o degrado grave dov
 \end{figure}
 
 
-
+\newpage
 \subsection{Benchmark 2: Confronto tra livelli di qualit\`a (Taming 3DGS)}
 \label{subsec:benchmark2_quality_levels}
 
@@ -501,8 +451,8 @@ Tutti i parametri di densificazione (\texttt{densify\_grad\_threshold}, \texttt{
 
 \paragraph{Scene di test}
 \begin{itemize}
-	\item \textbf{Lego Japanese Garden} -- geometrie regolari e dettagli architetturali.
-	\item \textbf{Yellow Plant} -- scena naturale con texture organiche complesse.
+	\item \textbf{S2 - Lego Japanese Garden} -- geometrie regolari e dettagli architetturali.
+	\item \textbf{S6 - Yellow Plant} -- scena naturale con texture organiche complesse.
 \end{itemize}
 
 \paragraph{Nota metodologica}
@@ -555,19 +505,31 @@ scena-dipendenti e talvolta degradanti, aumentando il rischio di instabilità nu
 \end{table}
 
 \paragraph{Lettura dei risultati}
-Le differenze qualitative tra i tre livelli sono contenute: in \textit{Lego}, Fast e Quality
-raggiungono entrambi un PSNR di circa 31.3--31.4, mentre Balanced risulta leggermente inferiore.
-In \textit{Yellow Plant}, LPIPS migliora marginalmente in Quality ma l’incremento è modesto.
-Il tempo di elaborazione cresce in modo significativo: \textbf{+55\%} per Quality rispetto a Fast
-in \textit{Lego} e \textbf{+42\%} in \textit{Yellow Plant}.
-La VRAM non mostra un andamento monotono e le temperature restano stabili (69--73\,${}^\circ$C).
+Sul nostro set sperimentale le differenze tra \textit{Fast}, \textit{Balanced} e \textit{Quality} sono
+\textbf{scena-dipendenti} e non emergono gerarchie stabili. In particolare, \textit{Fast} non produce
+necessariamente una qualità inferiore a \textit{Quality}: nelle scene che convergono rapidamente
+l’aumento di iterazioni oltre una certa soglia porta a miglioramenti marginali (plateau), sicché
+\textit{Fast} può eguagliare \textit{Quality} entro lo scarto sperimentale; al contrario, in scene più
+complesse o lente a convergere, \textit{Quality} tende a ottenere metriche superiori, con un vantaggio
+di entità variabile e scena-dipendente. Gli scarti osservati tra run sono generalmente contenuti
+(fino a \(\sim 0.9\) dB di PSNR nel caso peggiore) e riflettono la componente stocastica del training
+(selezione/ordine delle viste e inizializzazioni), senza tuttavia ribaltare il quadro complessivo.
+Sul fronte dei costi, \textit{Quality} richiede tempi sensibilmente maggiori (es. +55\% su \textit{Lego},
++42\% su \textit{Yellow Plant}) a fronte di guadagni che, in alcune scene, risultano modesti; \textit{Fast}
+è indicato per iterazioni rapide; \textit{Balanced} rimane un compromesso ragionevole quando il budget
+di tempo/VRAM è limitato. L’uso di VRAM non è monotono e le temperature restano stabili
+(69--73\,${}^\circ$C).
+
+
 
 \paragraph{Raccomandazione operativa}
 \begin{itemize}
-	\item \textbf{Fast} -- Profilo consigliato per deployment veloci: tempi ridotti del 35--50\% rispetto a Quality, con differenze metriche trascurabili.
-	\item \textbf{Balanced} -- Poco utile con i settaggi attuali; può diventare rilevante solo se calibrato diversamente (es. densificazione intermedia).
-	\item \textbf{Quality} -- Da usare solo quando il tempo non è un vincolo e si desidera massimizzare ogni punto percentuale di qualità.
+	\item \textbf{Fast} — Profilo \emph{default} per iterazioni rapide e scenari con budget di tempo/VRAM limitato. Nei nostri test ha ridotto i tempi di circa 35--50\% rispetto a \textit{Quality}, con scarti di qualità spesso marginali nelle scene che convergono rapidamente (plateau precoce).
+	\item \textbf{Balanced} — Compromesso sensato quando si vuole maggiore robustezza rispetto a \textit{Fast} mantenendo un budget moderato. Utile su scene di complessità media o quando non è chiaro se la scena abbia già raggiunto il plateau; la sua efficacia cresce se calibrato (p.es.\ numero di iterazioni, densificazione/intervalli di pruning).
+	\item \textbf{Quality} — Indicato per scene lente a convergere o ricche di dettagli/alta frequenza (vegetazione, texture fini, occlusioni), quando il tempo non è un vincolo. Può implicare un +40--60\% di tempo e presenta maggiore rischio di spike di VRAM.
 \end{itemize}
+
+\noindent\textit{Strategia pratica.} Approccio progressivo: avvia con \textit{Fast} e valuta su un set di viste fisso; se il passaggio a profili superiori stima un beneficio oltre soglia (es.\ $\Delta$PSNR $>0.5$\,dB o $\Delta$LPIPS $>0.01$), promuovi a \textit{Balanced}/\textit{Quality}; altrimenti mantieni \textit{Fast}.
 
 % ---------------------- IMMAGINI LEGO ----------------------
 \begin{figure}[H]
@@ -586,7 +548,7 @@ La VRAM non mostra un andamento monotono e le temperature restano stabili (69--7
 		\includegraphics[width=\linewidth, height=2.3cm, trim={80 40 80 40}, clip]{images/benchmarks/lego_japanese_garden_taming_quality.jpg}
 		\caption{Quality}
 	\end{subfigure}
-	\caption{Confronto visivo dei livelli di qualit\`a -- scena \textit{Lego Japanese Garden} (crop centrale).}
+	\caption{Confronto visivo dei livelli di qualit\`a -- scena \textit{S2 - Lego Japanese Garden} (crop centrale).}
 	\label{fig:lego_japanese_garden_quality_comparison}
 \end{figure}
 
@@ -607,18 +569,18 @@ La VRAM non mostra un andamento monotono e le temperature restano stabili (69--7
 		\includegraphics[width=\linewidth, height=2.3cm, trim={80 40 80 40}, clip]{images/benchmarks/yellow_plant_taming_quality.jpg}
 		\caption{Quality}
 	\end{subfigure}
-	\caption{Confronto visivo dei livelli di qualit\`a -- scena \textit{Yellow Plant} (crop centrale).}
+	\caption{Confronto visivo dei livelli di qualit\`a -- scena \textit{S6 - Yellow Plant} (crop centrale).}
 	\label{fig:yellow_plant_quality_comparison}
 \end{figure}
 
 
-\subsection{Benchmark 3: Latency Budget End-to-End (Balanced, 30k iterazioni)}
+\subsection{Benchmark 3: Latency Budget End-to-End (Quality, 30k iterazioni)}
 \label{subsec:latency_budget_inria}
 
 \paragraph{Setup}
-Tutti i test sono stati eseguiti con tutti gli algoritmi, preset \textbf{Balanced}, su una RTX 4080 16GB (WSL2).  
+Tutti i test sono stati eseguiti con tutti gli algoritmi con preset \textbf{Quality}.
 Il numero di iterazioni di training è fisso a \textbf{30\,000} per tutte le scene.  
-Le metriche PSNR/SSIM/LPIPS sono calcolate in un job asincrono e non influiscono sul \emph{time-to-preview}.
+Le metriche PSNR/SSIM/LPIPS sono calcolate da un job asincrono e non influiscono sul \emph{time-to-preview}.
 
 % --- RIEPILOGO PER SCENA ---
 \begin{table}[H]
@@ -630,21 +592,21 @@ Le metriche PSNR/SSIM/LPIPS sono calcolate in un job asincrono e non influiscono
 		\toprule
 		\textbf{Scena} & \textbf{Tempo Totale (s)} & \textbf{\#Frame} & \textbf{Punti COLMAP} & \textbf{Gauss. finali} \\
 		\midrule
-		S1 — \textit{Master of Puppets} &
+		S3 — \textit{Master of Puppets} &
 		917 &
 		189 &
 		61\,014 &
 		324\,662 \\
-		S2 — \textit{Lego Display Window} &
-		866 &
-		234 &
-		30\,304 &
-		470\,058 \\
-		S3 — \textit{Yellow Plant} &
+		S6 — \textit{Yellow Plant} &
 		1416 &
 		202 &
 		120\,521 &
 		1\,409\,058 \\
+		S7 — \textit{Lego Display Window} &
+		866 &
+		234 &
+		30\,304 &
+		470\,058 \\
 		\bottomrule
 	\end{tabularx}
 \end{table}
@@ -677,7 +639,7 @@ Le metriche PSNR/SSIM/LPIPS sono calcolate in un job asincrono e non influiscono
 			\addplot coordinates {(INRIA,8.24) (MCMC,29.98) (Taming,27.76)}; \addlegendentry{PLY→KSPLAT}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Latency budget per algoritmo — \emph{S1: Master of Puppets} (Balanced, 30k).}
+	\caption{Latency budget per algoritmo — \emph{S3: Master of Puppets} (Quality, 30k).}
 	\label{fig:s1_algos}
 \end{figure}
 
@@ -707,7 +669,7 @@ Le metriche PSNR/SSIM/LPIPS sono calcolate in un job asincrono e non influiscono
 			\addplot coordinates {(INRIA,13.95) (MCMC,26.11) (Taming,28.19)}; \addlegendentry{PLY→KSPLAT}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Latency budget per algoritmo — \emph{S2: Lego Display Window} (Balanced, 30k).}
+	\caption{Latency budget per algoritmo — \emph{S7: Lego Display Window} (Quality, 30k).}
 	\label{fig:s2_algos}
 \end{figure}
 
@@ -734,10 +696,10 @@ Le metriche PSNR/SSIM/LPIPS sono calcolate in un job asincrono e non influiscono
 			% Depth (solo INRIA)
 			\addplot coordinates {(INRIA,52.24) (MCMC,0) (Taming,0)}; \addlegendentry{Depth}
 			% PLY→KSPLAT
-			\addplot coordinates {(INRIA,45.15) (MCMC,62.77) (Taming,61.99)}; \addlegendentry{PLY→KSPLAT}
+			\addplot coordinates {(INRIA,4.06) (MCMC,4.77) (Taming,12.01)}; \addlegendentry{PLY→KSPLAT}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Latency budget per algoritmo — \emph{S3: Yellow Plant} (Balanced, 30k).}
+	\caption{Latency budget per algoritmo — \emph{S6: Yellow Plant} (Quality, 30k).}
 	\label{fig:s3_algos}
 \end{figure}
 
@@ -753,9 +715,9 @@ Le metriche PSNR/SSIM/LPIPS sono calcolate in un job asincrono e non influiscono
 				ybar, bar width=12pt,
 				ylabel={KSPLAT/PLY},
 				ylabel style={font=\footnotesize},
-				symbolic x coords={S1,S2,S3},
+				symbolic x coords={S3,S7,S6},
 				xtick=data,
-				ymin=0, ymax=0.16,
+				ymin=0, ymax=0.4,
 				ymajorgrids,
 				height=6cm, width=\linewidth,
 				enlarge x limits=0.25,
@@ -765,7 +727,7 @@ Le metriche PSNR/SSIM/LPIPS sono calcolate in un job asincrono e non influiscono
 				nodes near coords align={vertical},
 				every node near coord/.append style={font=\scriptsize, /pgf/number format/precision=3}
 				]
-				\addplot coordinates {(S1,0.129) (S2,0.129) (S3,0.129)};
+				\addplot coordinates {(S3,0.22) (S6,0.25) (S7,0.22)};
 			\end{axis}
 		\end{tikzpicture}
 	\end{minipage}
@@ -778,9 +740,9 @@ Le metriche PSNR/SSIM/LPIPS sono calcolate in un job asincrono e non influiscono
 				ybar, bar width=12pt,
 				ylabel={Tempo per MB (s/MB)},
 				ylabel style={font=\footnotesize},
-				symbolic x coords={S1,S2,S3},
+				symbolic x coords={S3,S7,S6},
 				xtick=data,
-				ymin=0, ymax=0.12,
+				ymin=0, ymax=0.1,
 				ymajorgrids,
 				height=6cm, width=\linewidth,
 				enlarge x limits=0.25,
@@ -790,7 +752,7 @@ Le metriche PSNR/SSIM/LPIPS sono calcolate in un job asincrono e non influiscono
 				nodes near coords align={vertical},
 				every node near coord/.append style={font=\scriptsize, /pgf/number format/precision=3}
 				]
-				\addplot coordinates {(S1,0.100) (S2,0.102) (S3,0.103)};
+				\addplot coordinates {(S3,0.01) (S7,0.02) (S6,0.02)};
 			\end{axis}
 		\end{tikzpicture}
 	\end{minipage}
@@ -803,28 +765,63 @@ Le metriche PSNR/SSIM/LPIPS sono calcolate in un job asincrono e non influiscono
 	\centering
 	\begin{tikzpicture}
 		\begin{axis}[
-			xlabel={Gaussiane finali}, ylabel={Tempo training (s, solo)},
-			xmajorgrids, ymajorgrids, height=6.5cm, width=0.7\linewidth
+			xlabel={Gaussiane finali},
+			ylabel={Tempo di training (s)},
+			xmajorgrids, ymajorgrids,
+			height=6.5cm, width=0.7\linewidth,
+			nodes near coords,
+			point meta=explicit symbolic,      % usa la colonna 'label' come testo
+			every node near coord/.style={/pgf/number format/assume math mode=false, font=\footnotesize, anchor=west, xshift=2pt},
 			]
-			\addplot+[only marks, mark=*] coordinates {
-				(324662,661.82)
-				(470058,683.23)
-				(1409058,1072.53)
+			\addplot+[only marks, mark=*, mark size=2.3pt]
+			table [x=x, y=y, meta=label] {
+				x        y        label
+				324662   661.82   S3
+				470058   683.23   S7
+				1409058  1072.53  S6
 			};
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Durata del training (parte ottimizzazione) in funzione delle gaussiane finali.}
+	\caption{Durata del training in funzione delle gaussiane finali.}
 	\label{fig:train_vs_gauss}
 \end{figure}
 
+
 \paragraph{Osservazioni}
-Dall’analisi del \emph{latency budget} (Tab.~\ref{tab:inria_budget_all} e Fig.~\ref{fig:stacked_time_per_phase}) emerge come:
+Dall’analisi del \emph{latency budget} (Fig.~\ref{fig:s1_algos},\ref{fig:s2_algos} e \ref{fig:s3_algos} emerge come:
 \begin{itemize}
 	\item La fase di \textbf{training} sia nettamente la più onerosa in termini di tempo, assorbendo dal 72\% al 79\% del \emph{time-to-preview}, seguita dalla \textbf{ricostruzione COLMAP} (15–23\%).
-	\item La \textbf{depth regularization} incide in media per circa il 22–25\% del tempo di training, con valori piuttosto stabili tra le scene.
-	\item La \textbf{frame extraction} e la conversione \textbf{PLY$\rightarrow$KSPLAT} hanno un peso marginale, inferiore al 4\% complessivo, e costi computazionali per MB molto simili tra le scene (Fig.~\ref{fig:ply_ksplat_efficiency_minipage}).
-	\item Il rapporto di compressione PLY/KSPLAT è costante (0.129) grazie a una pipeline di conversione stabile e indipendente dalla complessità della scena.
+	\item La \textbf{depth regularization} per INRIA incide in media per circa il 22–25\% del tempo di training, con valori piuttosto stabili tra le scene.
+	\item La \textbf{frame extraction} e la conversione \textbf{PLY$\rightarrow$KSPLAT} hanno un peso marginale, inferiore al 1\% complessivo, e costi computazionali per MB molto simili tra le scene (Fig.~\ref{fig:ply_splat_efficiency_minipage}).
+	\item Il rapporto di compressione PLY/KSPLAT è sostanzialmente costante (0.22 - 0.25) grazie a una pipeline di conversione stabile e indipendente dalla complessità della scena.
 	\item Come mostra Fig.~\ref{fig:train_vs_gauss}, il tempo di training cresce con il numero di gaussiane finali, ma non in modo perfettamente lineare: scene con distribuzioni spaziali più complesse o ricche di dettagli (es. \emph{Yellow Plant}) possono richiedere tempi superiori a parità di incremento percentuale di gaussiane.
 \end{itemize}
 
-Questi dati, pur riferendosi al solo caso \emph{INRIA Balanced} con 30\,000 iterazioni, costituiscono una base per confronti futuri con altre configurazioni o algoritmi (MCMC, Taming) mantenendo costante la metodologia di misura.
+I risultati relativi alla conversione \textbf{PLY$\rightarrow$KSPLAT}, qui mostrati per il solo profilo \emph{Taming–Quality}, non dipendono in modo diretto dall’algoritmo di training, bensì principalmente dal \textbf{numero di gaussiane generate} (ed eventualmente dal grado SH). Per questo motivo non presentiamo grafici separati per MCMC o altre configurazioni: a parità di $N_{\text{gauss}}$ (e parametri di conversione), i comportamenti risultano comparabili.
+
+\subsection{Osservazioni e conclusioni}
+
+\paragraph{Sintesi dei risultati}
+\begin{itemize}
+	\item \textbf{Confronto algoritmi.} \textit{Taming 3DGS} emerge come miglior compromesso tra qualità, velocità e stabilità per il deploy web; \textit{MCMC 3DGS} mostra potenziale qualitativo ma è più lento e meno prevedibile in termini di risorse; \textit{INRIA} resta una baseline leggera e rapida, specialmente se supportata da depth regularization, ma tende a scalare peggio in risoluzione.
+	\item \textbf{Scena-dipendenza dei profili.} Le differenze tra \textit{Fast}, \textit{Balanced} e \textit{Quality} sono \emph{scena-dipendenti}. In scene a convergenza rapida, \textit{Fast} può eguagliare \textit{Quality} entro lo scarto sperimentale; in scene complesse, \textit{Quality} tende a prevalere ma con vantaggi variabili.
+	\item \textbf{Latency budget.} Il training è il collo di bottiglia principale (≈72–79\% del tempo), seguito da \textit{COLMAP}. \textit{Frame extraction} e conversione \textbf{PLY$\rightarrow$KSPLAT} pesano marginalmente ($<1\%$).
+	\item \textbf{VRAM e stabilità.} L’uso di VRAM non è monotono e può presentare spike: a 1080p MCMC/Taming raggiungono la risoluzione ma con rischio di OOM; INRIA si stabilizza a 720p. Le temperature restano contenute (≈69–73\,${}^\circ$C).
+	\item \textbf{Conversione PLY$\rightarrow$KSPLAT.} Rapporto di compressione quasi costante (0.22–0.25) e costo per MB simile tra scene; l’adattamento \emph{logit} per Taming normalizza l’opacity per i viewer, favorendo l’interoperabilità.
+\end{itemize}
+
+\paragraph{Limiti e minacce alla validità}
+\begin{itemize}
+	\item \textbf{Depth regularization come variabile confondente:} i risultati INRIA includono depth priors; il confronto riflette scenari di deploy realistici, ma non è perfettamente “alla pari”.
+	\item \textbf{Non determinismo:} senza seed/split fissati, lievi scarti tra run sono attesi; i valori riportati vanno letti con questa tolleranza.
+	\item \textbf{Copertura hardware e risoluzione:} i test sono stati eseguiti su una singola GPU (RTX 4080/16 GB). Come risoluzione di riferimento è stato adottato il 720p perché, sul nostro hardware, è quella che garantisce la massima stabilità e riproducibilità per tutti gli algoritmi.
+	
+\end{itemize}
+
+\paragraph{Raccomandazioni operative}
+\begin{itemize}
+	\item \textbf{Approccio progressivo:} avviare con \textit{Fast}, valutare su viste fisse; promuovere a \textit{Balanced}/\textit{Quality} solo se il guadagno stimato supera una soglia pratica (es.\ $\Delta$PSNR $>0.5$ dB o $\Delta$LPIPS $>0.01$).
+	\item \textbf{Gestione VRAM:} preferire 720p per scene dense o con vegetazione; valutare 1080p caso per caso, monitorando i picchi di memoria. Se ci si avvicina al limite della VRAM, interrompere e rilanciare con parametri più conservativi (risoluzione/iterazioni/SH/cams).
+	\item \textbf{Pipeline stabile:} mantenere la conversione \textbf{PLY$\rightarrow$KSPLAT} con adattamento dell’opacity per Taming; loggare $N_{\text{gauss}}$, SH degree e parametri di conversione per confronti futuri.
+\end{itemize}
+
