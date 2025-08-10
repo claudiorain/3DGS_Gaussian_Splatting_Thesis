@@ -1,0 +1,28 @@
+# LaTeX build
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.idx
+*.ilg
+*.ind
+*.lof
+*.lot
+*.log
+*.out
+*.run.xml
+*.synctex*
+*.toc
+texput.log
+
+# Editor backup
+*~
+*.tex~*
+*.bak
+
+# PDF generati (tienili fuori dal repo)
+*.pdf
+
+# Font (gestiscili fuori, se possibile)
+*.ttf
+*.otf
